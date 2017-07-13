@@ -10,6 +10,7 @@ import databaseConnection.Result;
 import databaseConnection.ResultSetCustomized;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -43,10 +44,33 @@ public class Users {
         }
         return -1;
     }
-
-    public ResultSetCustomized LogIn(DataAccess da, String userName, String Password) {
-        String sql = "SELECT * FROM " + da.getSchema() + "Users WHERE email = '" + email + "';";
-        return da.executeSqlQuery(sql);
+    public Result updateUserState(DataAccess da, boolean isActive, String email){
+        Result result;
+        String sql = "UPDATE " + da.getSchema() + "Users SET isActive = ? WHERE email = ?";
+        try {
+            PreparedStatement stmt = da.getConnection().prepareStatement(sql);
+            stmt.setBoolean(1, isActive);
+            stmt.setString(2, email);
+            result = da.executeSQL(stmt);
+        } catch (SQLException ex) {
+            result = new Result();
+            result.setError(ex.getLocalizedMessage());
+        }
+        return result;
+    }
+    public ResultSetCustomized LogIn(DataAccess da, String email, String Password) {
+        ResultSetCustomized result;
+        PreparedStatement stmt;
+        String sql = "SELECT * FROM " + da.getSchema() + "Users WHERE email = '" + email + "' AND userPassword = '" + Password + "';";
+        try {
+            stmt = da.getConnection().prepareStatement(sql);
+            result = da.executeSqlQuery(stmt);
+            
+        } catch (SQLException ex) {
+            result = new ResultSetCustomized();
+            result.setError(ex.getLocalizedMessage());
+        }
+        return result;
     }
 
     public Result createBuyerPerson(DataAccess da, int id_User, String buyerName, String Identification, int age) {
