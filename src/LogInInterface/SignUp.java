@@ -7,7 +7,7 @@ package LogInInterface;
 
 import javax.swing.JOptionPane;
 import databaseConnection.DataAccess;
-import Queries.Users;
+import Queries.User;
 import databaseConnection.ResultSetCustomized;
 import java.sql.ResultSet;
 
@@ -18,7 +18,7 @@ import java.sql.ResultSet;
 public class SignUp extends javax.swing.JFrame {
 
     private final DataAccess dataAccess;
-    private final Users user = new Users();
+    private final User user = new User();
 
    
     public SignUp(DataAccess dataAccess) {

@@ -22,6 +22,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     public ShoppingSellerWithToolBar(DataAccess dataAccess) {
         initComponents();
         this.datasAccess = dataAccess;  
+        ssToolbar.setToolBarListeners();
     }
     public void menuBack(){
         setVisible(false);    
@@ -43,16 +44,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         jComboBox2 = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jtbCRUDToolBar = new javax.swing.JToolBar();
-        jbNew = new javax.swing.JButton();
-        jbEdit = new javax.swing.JButton();
-        jbSave = new javax.swing.JButton();
-        jbCancel = new javax.swing.JButton();
-        jbDelete = new javax.swing.JButton();
-        jbFind = new javax.swing.JButton();
-        jbFilter = new javax.swing.JButton();
-        jbReload = new javax.swing.JButton();
-        jbExit = new javax.swing.JButton();
+        ssToolbar = new ShopWebSiteInterface.Toolbar();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -110,79 +102,6 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jbNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/New.png"))); // NOI18N
-        jbNew.setText("New");
-        jbNew.setFocusable(false);
-        jbNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbNew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jtbCRUDToolBar.add(jbNew);
-
-        jbEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Modify.png"))); // NOI18N
-        jbEdit.setText("Modify");
-        jbEdit.setFocusable(false);
-        jbEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jtbCRUDToolBar.add(jbEdit);
-
-        jbSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Save.png"))); // NOI18N
-        jbSave.setText("Save");
-        jbSave.setFocusable(false);
-        jbSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jbSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSaveActionPerformed(evt);
-            }
-        });
-        jtbCRUDToolBar.add(jbSave);
-
-        jbCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Cancel.png"))); // NOI18N
-        jbCancel.setText("Cancel");
-        jbCancel.setFocusable(false);
-        jbCancel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbCancel.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jbCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbCancelActionPerformed(evt);
-            }
-        });
-        jtbCRUDToolBar.add(jbCancel);
-
-        jbDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Delete.png"))); // NOI18N
-        jbDelete.setText("Delete");
-        jbDelete.setFocusable(false);
-        jbDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jtbCRUDToolBar.add(jbDelete);
-
-        jbFind.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Find.png"))); // NOI18N
-        jbFind.setText("Search");
-        jbFind.setFocusable(false);
-        jbFind.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbFind.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jtbCRUDToolBar.add(jbFind);
-
-        jbFilter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Filter.png"))); // NOI18N
-        jbFilter.setText("Filtrer");
-        jbFilter.setFocusable(false);
-        jbFilter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbFilter.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jtbCRUDToolBar.add(jbFilter);
-
-        jbReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Refresh.png"))); // NOI18N
-        jbReload.setText("Refresh");
-        jbReload.setFocusable(false);
-        jbReload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbReload.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jtbCRUDToolBar.add(jbReload);
-
-        jbExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Exit.png"))); // NOI18N
-        jbExit.setText("Exit");
-        jbExit.setFocusable(false);
-        jbExit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbExit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jtbCRUDToolBar.add(jbExit);
-
         jMenu1.setText("Option");
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/go-back-icon.png"))); // NOI18N
@@ -203,37 +122,37 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(cbCode, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(cbState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jtbCRUDToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(cbCode, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cbState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ssToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
-                .addComponent(jtbCRUDToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addComponent(ssToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(cbCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -265,14 +184,6 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
        
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jbSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbSaveActionPerformed
-
-    private void jbCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbCancelActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -295,16 +206,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    public javax.swing.JButton jbCancel;
-    public javax.swing.JButton jbDelete;
-    public javax.swing.JButton jbEdit;
-    public javax.swing.JButton jbExit;
-    public javax.swing.JButton jbFilter;
-    private javax.swing.JButton jbFind;
-    public javax.swing.JButton jbNew;
-    public javax.swing.JButton jbReload;
-    public javax.swing.JButton jbSave;
-    private javax.swing.JToolBar jtbCRUDToolBar;
+    private ShopWebSiteInterface.Toolbar ssToolbar;
     private javax.swing.JTextField tfProductName;
     // End of variables declaration//GEN-END:variables
 }

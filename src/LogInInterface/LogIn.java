@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import Queries.Users;
+import Queries.User;
 import com.sun.javafx.scene.control.skin.FXVK;
 
 /**
@@ -42,7 +42,7 @@ public class LogIn extends javax.swing.JFrame {
         String email = "";
         String password = "";
         ResultSetCustomized Result;
-        Users users = new Users();
+        User users = new User();
          char [] pass = pfPassword.getPassword();
          String passwordText = "";
              for (char p : pass ){

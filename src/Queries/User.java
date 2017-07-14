@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  *
  * @author Ana Elena Ulate Salas
  */
-public class Users {
+public class User {
 
     private DataAccess dataAccess;
 
