@@ -155,7 +155,7 @@ public class MainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCatalogueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCatalogueActionPerformed
-        setVisible(false);
+       setVisible(false);
         Shopping sp = new Shopping(dataAccess);
         sp.setVisible(true);
         
@@ -166,6 +166,8 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void btShoppingCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btShoppingCartActionPerformed
+        ShoppingSellerWithToolBar sswtb =  new ShoppingSellerWithToolBar(dataAccess);
+        sswtb.setVisible(true);
         
     }//GEN-LAST:event_btShoppingCartActionPerformed
 

@@ -161,4 +161,8 @@ public class Product {
         }
         return result;
     }
+    public String[] getIdentifiers(){
+        String[] identifiers = {"Id","Code","Product Name","Price","State","Amount","Country"};
+        return identifiers;
+    }
 }
