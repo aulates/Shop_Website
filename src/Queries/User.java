@@ -65,7 +65,7 @@ public class User {
         try {
             stmt = da.getConnection().prepareStatement(sql);
             result = da.executeSqlQuery(stmt);
-            
+            System.out.println(result.getResultSet().toString());
         } catch (SQLException ex) {
             result = new ResultSetCustomized();
             result.setError(ex.getLocalizedMessage());
@@ -123,6 +123,20 @@ public class User {
         } catch (SQLException e) {
             result = new Result();
             result.setError(e.getLocalizedMessage());
+        }
+        return result;
+    }
+    public ResultSetCustomized currentUser(DataAccess da) {
+        ResultSetCustomized result;
+        PreparedStatement stmt;
+        String sql = "SELECT id, user_type FROM " + da.getSchema() + "Users WHERE isActive = true;";
+        try {
+            stmt = da.getConnection().prepareStatement(sql);
+            result = da.executeSqlQuery(stmt);
+            System.out.println(result);
+        } catch (SQLException ex) {
+            result = new ResultSetCustomized();
+            result.setError(ex.getLocalizedMessage());
         }
         return result;
     }

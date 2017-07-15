@@ -6,7 +6,9 @@
 package ShopWebSiteInterface;
 
 import LogInInterface.MainFrame;
+import Queries.User;
 import databaseConnection.DataAccess;
+import databaseConnection.ResultSetCustomized;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,6 +17,7 @@ import javax.swing.JOptionPane;
  */
 public class MainMenu extends javax.swing.JFrame {
     private DataAccess dataAccess;
+    User user = new User();
     /**
      * Creates new form MainMenu
      */
@@ -22,6 +25,7 @@ public class MainMenu extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         this.dataAccess = dataAccess;
+        checkUserType();
     }
     public void menuBack(){
         setVisible(false);
@@ -37,6 +41,26 @@ public class MainMenu extends javax.swing.JFrame {
         setVisible(false);
         Shopping sp = new Shopping(dataAccess);
         sp.setVisible(true);
+       
+    }
+    public void checkUserType(){
+        ResultSetCustomized result; 
+        result = user.currentUser(dataAccess);
+        String userType = "";
+                try {
+                    if (result.getResultSet().next()) {
+                    userType = result.getResultSet().getString("user_type");
+                        System.out.println(userType);
+                     }
+        } catch (Exception e) {
+        }
+        if(userType.equals("Consumer")){
+            btCatalogue.setEnabled(true);
+            
+        }
+        else{
+            btCatalogue.setEnabled(false);
+        }
     }
     public void shoppingCart(){
         setVisible(false);

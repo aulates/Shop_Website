@@ -63,8 +63,8 @@ public class Toolbar extends javax.swing.JPanel {
         jbDelete = new javax.swing.JButton();
         jbFind = new javax.swing.JButton();
         jbFilter = new javax.swing.JButton();
-        jbReload = new javax.swing.JButton();
         jbExit = new javax.swing.JButton();
+        jbReload = new javax.swing.JButton();
 
         jbNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/New.png"))); // NOI18N
         jbNew.setText("New");
@@ -85,11 +85,6 @@ public class Toolbar extends javax.swing.JPanel {
         jbSave.setFocusable(false);
         jbSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jbSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jbSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSaveActionPerformed(evt);
-            }
-        });
         jtbCRUDToolBar.add(jbSave);
 
         jbCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Cancel.png"))); // NOI18N
@@ -97,11 +92,6 @@ public class Toolbar extends javax.swing.JPanel {
         jbCancel.setFocusable(false);
         jbCancel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jbCancel.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jbCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbCancelActionPerformed(evt);
-            }
-        });
         jtbCRUDToolBar.add(jbCancel);
 
         jbDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Delete.png"))); // NOI18N
@@ -125,13 +115,6 @@ public class Toolbar extends javax.swing.JPanel {
         jbFilter.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jtbCRUDToolBar.add(jbFilter);
 
-        jbReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Refresh.png"))); // NOI18N
-        jbReload.setText("Refresh");
-        jbReload.setFocusable(false);
-        jbReload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbReload.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jtbCRUDToolBar.add(jbReload);
-
         jbExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Exit.png"))); // NOI18N
         jbExit.setText("Exit");
         jbExit.setFocusable(false);
@@ -139,11 +122,20 @@ public class Toolbar extends javax.swing.JPanel {
         jbExit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jtbCRUDToolBar.add(jbExit);
 
+        jbReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Refresh.png"))); // NOI18N
+        jbReload.setText("Refresh");
+        jbReload.setFocusable(false);
+        jbReload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbReload.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jtbCRUDToolBar.add(jbReload);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jtbCRUDToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jtbCRUDToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,14 +144,6 @@ public class Toolbar extends javax.swing.JPanel {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jbSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbSaveActionPerformed
-
-    private void jbCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbCancelActionPerformed
 
     // <editor-fold defaultstate="collapsed" desc="Toolbar listeners">
     /**
@@ -176,10 +160,10 @@ public class Toolbar extends javax.swing.JPanel {
             this.jbEditActionPerformed(evt);
         });
         this.jbSave.addActionListener((java.awt.event.ActionEvent evt) -> {
-            this.jbSaveActionPerformed(evt);
+            this.jbSaveActionPerfomed(evt);
         });
         this.jbCancel.addActionListener((java.awt.event.ActionEvent evt) -> {
-            this.jbCancelActionPerformed(evt);
+            this.jbCancelActionPerfomed(evt);
         });
         this.jbDelete.addActionListener((java.awt.event.ActionEvent evt) -> {
             this.jbDeleteActionPerformed(evt);

@@ -18,15 +18,16 @@ import java.sql.SQLException;
 
 public class Product {
     
-    public int createProduct(DataAccess da, String code, String state, String country, String productName) {
+    public int createProduct(DataAccess da, String code, String state, String country, String productName, int price) {
         ResultSetCustomized result;
-        String sql = "INSERT INTO" + da.getSchema() + "Products( code, state, country, productName) VALUES (?, ?, ?, ?) returning id;";
+        String sql = "INSERT INTO" + da.getSchema() + "Products(code, state, country, productName, price) VALUES (?, ?, ?, ?,?) returning id;";
         try {
             PreparedStatement stmt = da.getConnection().prepareStatement(sql);
             stmt.setString(1, code);
             stmt.setString(2, state);
             stmt.setString(3, country);
             stmt.setString(4, productName);
+            stmt.setInt(5, price); 
             result = da.executeSqlQuery(stmt);
             
             if (!result.isError() && result.getResultSet().next()) {
@@ -58,7 +59,7 @@ public class Product {
     }
     public Result updateUserProductAmount(DataAccess da, int amount, int id){
         Result result;
-        String sql = "UPDATE " + da.getSchema() + "UserProducts SET amount = ? WHERE id = ?";
+        String sql = "UPDATE " + da.getSchema() + "UserProducts SET amount = ? WHERE id_User = ?";
         try {
             PreparedStatement stmt = da.getConnection().prepareStatement(sql);
             stmt.setInt(1, amount);
@@ -87,10 +88,11 @@ public class Product {
     public ResultSetCustomized searchProductByName(DataAccess da, String productName, String code) {
         ResultSetCustomized result;
         PreparedStatement stmt;
-        String sql = "SELECT p.id, p.code, p.productName, p.price, p.state, p.amount, p.country FROM " 
+        String sql = "SELECT p.id, p.code, p.productName, p.price, p.state, up.amount, p.country FROM " 
                 + da.getSchema() + "Products p JOIN " + da.getSchema() 
                 + "UserProducts up ON p.id = up.id_Product JOIN" + da.getSchema()
-                + "Users u ON up.id_User = u.id WHERE p.productName = '" + productName + "' OR p.code = '" + code + "';";
+                + "Users u ON up.id_User = u.id WHERE p.productName LIKE '" 
+                + productName + "' OR p.code = '" + code + "';";
         try {
             stmt = da.getConnection().prepareStatement(sql);
             result = da.executeSqlQuery(stmt);
@@ -104,7 +106,7 @@ public class Product {
     public ResultSetCustomized getAllProduct(DataAccess da) {
         ResultSetCustomized result;
         PreparedStatement stmt;
-        String sql = "SELECT p.id, p.code, p.productName, p.price, p.state, p.amount, p.country FROM " 
+        String sql = "SELECT p.id, p.code, p.productName, p.price, p.state, up.amount, p.country FROM " 
                 + da.getSchema() + "Products p JOIN " + da.getSchema() 
                 + "UserProducts up ON p.id = up.id_Product JOIN" + da.getSchema()
                 + "Users u ON up.id_User = u.id;"; 
@@ -121,10 +123,27 @@ public class Product {
     public ResultSetCustomized getAllSellerProduct(DataAccess da, int id) {
         ResultSetCustomized result;
         PreparedStatement stmt;
-        String sql = "SELECT p.id, p.code, p.productName, p.price, p.state, p.amount, p.country FROM " 
+    String sql = "SELECT p.id, p.code, p.productName, p.price, p.state, up.amount, p.country FROM " 
                 + da.getSchema() + "Products p JOIN " + da.getSchema() 
                 + "UserProducts up ON p.id = up.id_Product JOIN" + da.getSchema()
                 + "Users u ON up.id_User = u.id WHERE u.id = '" + id + "';"; 
+        try {
+            stmt = da.getConnection().prepareStatement(sql);
+            result = da.executeSqlQuery(stmt);
+            
+        } catch (SQLException ex) {
+            result = new ResultSetCustomized();
+            result.setError(ex.getLocalizedMessage());
+        }
+        return result;
+    }
+    public ResultSetCustomized getAllSellersProductForCatalogue(DataAccess da, String code) {
+        ResultSetCustomized result;
+        PreparedStatement stmt;
+    String sql = "SELECT p.id, p.code, p.productName, p.price, p.state, up.amount, p.country FROM " 
+                + da.getSchema() + "Products p JOIN " + da.getSchema() 
+                + "UserProducts up ON p.id = up.id_Product JOIN" + da.getSchema()
+                + "Users u ON up.id_User = u.id WHERE p.code = '" + code + "' AND u.user_type = 'Seller';"; 
         try {
             stmt = da.getConnection().prepareStatement(sql);
             result = da.executeSqlQuery(stmt);
@@ -166,3 +185,4 @@ public class Product {
         return identifiers;
     }
 }
+ 

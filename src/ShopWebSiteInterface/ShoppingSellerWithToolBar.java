@@ -6,10 +6,13 @@
 package ShopWebSiteInterface;
 
 import Queries.Product;
+import Queries.User;
 import databaseConnection.DataAccess;
 import databaseConnection.DatabaseUtils;
+import databaseConnection.Result;
 import databaseConnection.ResultSetCustomized;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -26,18 +29,23 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     private String productNameFilter;
     private String productCodeFilter;
     Product product = new Product();
+    User user = new User();
     /**
      * Creates new form ShoppingSeller
      */
     public ShoppingSellerWithToolBar(DataAccess dataAccess) {
         initComponents();
-        this.datasAccess = dataAccess;  
+        setLocationRelativeTo(null);        
+        this.datasAccess = dataAccess; 
         ssToolbar.setToolBarListeners();
-        setLocationRelativeTo(null);
+        this.setStateOfGroup( jpAtributtes, false);
+        this.refreshData(false);
+        this.enableRowSelectionListener();
     }
     public void menuBack(){
         setVisible(false);
-        
+        MainMenu mm = new MainMenu(datasAccess);
+        mm.setVisible(true);
     }
     private void enableRowSelectionListener(){
         ListSelectionModel lsm = tAddProducts.getSelectionModel();
@@ -59,16 +67,12 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
             cbCountry.setSelectedItem(tAddProducts.getModel().getValueAt(index, 6).toString());
         } catch (Exception e) {
             id = null;
-            clearTF();
+            clearTextField();
         }
     }
     private void selectFirstRowifExist(){
         if(tAddProducts.getRowCount() > 0)
             tAddProducts.setRowSelectionInterval(0, 0);
-    }
-    private void clearTF(){
-        tfPrice.setText("");
-        tfProductName.setText("");
     }
     private void primaryControlRequestFocus(){
         this.tfProductName.requestFocus();
@@ -83,11 +87,22 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     private void refreshData(boolean isFiltered){
         productNameFilter = tfProductName.getText();
         productCodeFilter = cbCode.getSelectedItem().toString();
+        int idUser = 0;
         ResultSetCustomized rs;
-        if(!isFiltered)
-            rs = product.getAllSellerProduct(datasAccess, 1);
-        else
+        if(!isFiltered){
+            rs = user.currentUser(datasAccess);
+            try {
+                if(rs.getResultSet().next()){
+                    idUser = Integer.parseInt(rs.getResultSet().getString("id"));
+                }
+            } catch (Exception e) {
+            }
+            
+            rs = product.getAllSellerProduct(datasAccess, idUser);
+        }
+        else{
             rs = product.searchProductByName(datasAccess, productNameFilter, productCodeFilter);
+        }
         if(rs.isError()){
             JOptionPane.showMessageDialog(this, rs.getErrorDescription(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -103,24 +118,25 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        cbCode = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tAddProducts = new javax.swing.JTable();
+        ssToolbar = new ShopWebSiteInterface.Toolbar();
+        jpAtributtes = new javax.swing.JPanel();
         cbState = new javax.swing.JComboBox<>();
+        tfPrice = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         cbCountry = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         tfProductName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         cbAmount = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tAddProducts = new javax.swing.JTable();
-        ssToolbar = new ShopWebSiteInterface.Toolbar();
+        jLabel1 = new javax.swing.JLabel();
+        cbCode = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        tfPrice = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        miBack = new javax.swing.JMenuItem();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -135,43 +151,6 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Code:");
-
-        cbCode.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cbCode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Home, Garden & Tools", "Sports & Outdoors", "Food & Grocery", "Automotive & Industrial", "Beauty & Health", "Books & Audible", "Toys, Kids & Baby", "Clothing, Shoes & Jewelry", "Electronics, Computers & Office", "Tablets", "Music" }));
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("State:");
-
-        cbState.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cbState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "New", "Used" }));
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setText("Country:");
-
-        cbCountry.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cbCountry.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic (CAR)", "Chad", "Chile", "China", "Colombia", "Comoros", "Democratic Republic of the Congo", "Republic of the Congo", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia ", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar ", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates (UAE)", "United Kingdom (UK)", "United States of America (USA)", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe" }));
-        cbCountry.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbCountryActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel4.setText("Product Name:");
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel5.setText("Amount:");
-
-        cbAmount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cbAmount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99" }));
-        cbAmount.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbAmountActionPerformed(evt);
-            }
-        });
-
         tAddProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -185,19 +164,99 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         ));
         jScrollPane1.setViewportView(tAddProducts);
 
+        cbState.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cbState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "New", "Used" }));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setText("Country:");
+
+        cbCountry.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cbCountry.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic (CAR)", "Chad", "Chile", "China", "Colombia", "Comoros", "Democratic Republic of the Congo", "Republic of the Congo", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia ", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar ", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates (UAE)", "United Kingdom (UK)", "United States of America (USA)", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe" }));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setText("Product Name:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setText("Amount:");
+
+        cbAmount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cbAmount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99" }));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Code:");
+
+        cbCode.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cbCode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Home, Garden & Tools", "Sports & Outdoors", "Food & Grocery", "Automotive & Industrial", "Beauty & Health", "Books & Audible", "Toys, Kids & Baby", "Clothing, Shoes & Jewelry", "Electronics, Computers & Office", "Tablets", "Music" }));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("State:");
+
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Price :");
 
+        javax.swing.GroupLayout jpAtributtesLayout = new javax.swing.GroupLayout(jpAtributtes);
+        jpAtributtes.setLayout(jpAtributtesLayout);
+        jpAtributtesLayout.setHorizontalGroup(
+            jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpAtributtesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(cbCode, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cbState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        jpAtributtesLayout.setVerticalGroup(
+            jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpAtributtesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(cbCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(cbState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(cbCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(cbAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(tfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpAtributtesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(tfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         jMenu1.setText("Option");
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/go-back-icon.png"))); // NOI18N
-        jMenuItem1.setText("Back");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        miBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/go-back-icon.png"))); // NOI18N
+        miBack.setText("Back");
+        miBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                miBackActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(miBack);
 
         jMenuBar1.add(jMenu1);
 
@@ -207,82 +266,32 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(123, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(cbCode, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cbState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(cbCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(cbAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ssToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ssToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jpAtributtes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(127, 127, 127))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(ssToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(cbCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(cbState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(cbCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(cbAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(tfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(tfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jpAtributtes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-       
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void cbAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAmountActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbAmountActionPerformed
-
-    private void cbCountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCountryActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbCountryActionPerformed
+    private void miBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBackActionPerformed
+       menuBack();
+    }//GEN-LAST:event_miBackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -303,12 +312,171 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jpAtributtes;
+    private javax.swing.JMenuItem miBack;
     private ShopWebSiteInterface.Toolbar ssToolbar;
     private javax.swing.JTable tAddProducts;
     private javax.swing.JTextField tfPrice;
     private javax.swing.JTextField tfProductName;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public boolean jbNewActionPerfomed(ActionEvent evt) {
+        this.clearTextField();
+        this.setStateOfGroup(jpAtributtes, true);
+        this.tfProductName.requestFocus();
+        this.tfPrice.requestFocus();
+        return true;
+    }
+    @Override
+    public boolean jbEditActionPerfomed(ActionEvent evt) {
+        if(tAddProducts.getSelectedRow() >= 0){
+            this.setStateOfGroup(jpAtributtes, true);
+            this.primaryControlRequestFocus();
+            return true;
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "You most select the row you want to modify", "Information!", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+    }
+    @Override
+    public boolean jbSaveActionPerfomed(ActionEvent evt) {
+        ResultSetCustomized result; 
+        result = user.currentUser(datasAccess);
+        int idUser = 0;
+                try {
+                    if (result.getResultSet().next()) {
+                    idUser = result.getResultSet().getInt("id");
+                        System.out.println(idUser);
+                     }
+        } catch (Exception e) {
+        }
+        if(validationLetters() && validationNum()){
+            
+            if(ssToolbar.isInserting()){
+                int idProduct = product.createProduct(datasAccess, cbCode.getSelectedItem().toString(), 
+                        cbState.getSelectedItem().toString(), cbCountry.getSelectedItem().toString(),
+                        tfProductName.getText(), Integer.parseInt(tfPrice.getText()));
+                
+                
+                
+                System.out.println(result.getResultSet().toString());
+                product.createUserProducts(datasAccess,idUser ,
+                        idProduct, Integer.parseInt(cbAmount.getSelectedItem().toString()));
+            }
+            else{
+                product.updateProductPrice(datasAccess, Integer.parseInt(tfPrice.getText().toString()), tfProductName.getText());
+                product.updateUserProductAmount(datasAccess, Integer.parseInt(cbAmount.getSelectedItem().toString())
+                        , idUser);
+            }
+        }
+        this.clearTextField();
+        this.setStateOfGroup(jpAtributtes, false);
+        this.refreshData(this.ssToolbar.isFiltered());
+        this.selectFirstRowifExist();
+        return true;
+    }
+
+    @Override
+    public boolean jbCancelActionPerfomed(ActionEvent evt) {
+        this.clearTextField();
+        this.setStateOfGroup(jpAtributtes, false);
+        this.updateWithSelectedRow(tAddProducts.getSelectedRow());
+        return true;
+    }
+
+    @Override
+    public boolean jbDeleteActionPerfomed(ActionEvent evt) {
+        if(tAddProducts.getSelectedRow() >= 0){
+            if(JOptionPane.showConfirmDialog(this, "Are you sure, you want to delet this product?", "Information!",
+                    JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE ) == JOptionPane.NO_OPTION){
+                return false;
+            }
+            else{
+                int temp = this.id;
+                Result result = product.deleteUserProduct(datasAccess, temp);
+                if(!result.isError()){
+                    product.deleteProduct(datasAccess, temp);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, result.getErrorDescription(), "Error", JOptionPane.ERROR_MESSAGE);
+                   }
+            }
+            this.clearTextField();
+            this.refreshData(ssToolbar.isFiltered());
+            this.selectFirstRowifExist();
+            return true;
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "You must select the row to delete it", "Information!", JOptionPane.INFORMATION_MESSAGE);
+            return false;    
+        }
+    }
+
+    @Override
+    public boolean jbFindActionPerfomed(ActionEvent evt) {
+        this.clearTextField();
+        this.setStateOfGroup(jpAtributtes, true);
+        this.primaryControlRequestFocus();
+        return true;
+    }
+
+    @Override
+    public boolean jbFilterActionPerfomed(ActionEvent evt) {
+        refreshData(true);
+        clearTextField();
+        setStateOfGroup(jpAtributtes, false);
+        selectFirstRowifExist();
+        return true;
+    }
+
+    @Override
+    public boolean jbReloadActionPerfomed(ActionEvent evt) {
+        clearTextField();
+        this.refreshData(false);
+        selectFirstRowifExist();
+        return true;
+    }
+
+    @Override
+    public boolean jbExitActionPerfomed(ActionEvent evt) {
+        return true;
+    }
+
+    @Override
+    boolean validationNum() {
+        char[] num;
+        boolean state;
+        state = true;
+        num = tfPrice.getText().toLowerCase().toCharArray();
+        for (char i = 'a'; i <= 'z'; i++) {
+             for (int j = 0; j < num.length; j++) {
+                if(num[j] == i || tfPrice.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Price is empty or contains a letter", "Information!", JOptionPane.INFORMATION_MESSAGE);
+                    clearTextField();
+                    state = false;
+                }
+            }
+        }
+        return state;
+    }
+    @Override
+    boolean validationLetters() {
+        boolean state;
+        state = true;
+        if(tfProductName.getText().equals("")){
+            JOptionPane.showMessageDialog(this, "Product name is empty", "Information!", JOptionPane.INFORMATION_MESSAGE);
+            clearTextField();
+            state = false;
+        }
+        return state;
+    }
+    @Override
+    void clearTextField() {
+        tfPrice.setText("");
+        tfProductName.setText("");
+    }
 }
