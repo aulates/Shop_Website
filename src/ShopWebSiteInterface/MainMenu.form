@@ -118,6 +118,7 @@
               <Image iconType="3" name="/Icons/Shopping-cart-icon.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Shopping Cart"/>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
@@ -134,6 +135,7 @@
               <Image iconType="3" name="/Icons/Actions-view-list-details-icon (1).png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Catalogue"/>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalAlignment" type="int" value="1"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -151,6 +153,7 @@
               <Image iconType="3" name="/Icons/profile-icon.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Profile"/>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>

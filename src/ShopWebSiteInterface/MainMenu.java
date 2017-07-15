@@ -33,6 +33,16 @@ public class MainMenu extends javax.swing.JFrame {
         Profile pf = new Profile(dataAccess);
         pf.setVisible(true);
     }
+    public void catalogue(){
+        setVisible(false);
+        Shopping sp = new Shopping(dataAccess);
+        sp.setVisible(true);
+    }
+    public void shoppingCart(){
+        setVisible(false);
+        ShoppingSellerWithToolBar sswtb =  new ShoppingSellerWithToolBar(dataAccess);
+        sswtb.setVisible(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,6 +69,7 @@ public class MainMenu extends javax.swing.JFrame {
         btShoppingCart.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btShoppingCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Shopping-cart-icon.png"))); // NOI18N
         btShoppingCart.setText("Shopping Cart");
+        btShoppingCart.setFocusable(false);
         btShoppingCart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btShoppingCart.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btShoppingCart.addActionListener(new java.awt.event.ActionListener() {
@@ -70,6 +81,7 @@ public class MainMenu extends javax.swing.JFrame {
         btCatalogue.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btCatalogue.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Actions-view-list-details-icon (1).png"))); // NOI18N
         btCatalogue.setText("Catalogue");
+        btCatalogue.setFocusable(false);
         btCatalogue.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btCatalogue.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         btCatalogue.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -82,6 +94,7 @@ public class MainMenu extends javax.swing.JFrame {
         btProfile.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/profile-icon.png"))); // NOI18N
         btProfile.setText("Profile");
+        btProfile.setFocusable(false);
         btProfile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btProfile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btProfile.addActionListener(new java.awt.event.ActionListener() {
@@ -155,10 +168,7 @@ public class MainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCatalogueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCatalogueActionPerformed
-       setVisible(false);
-        Shopping sp = new Shopping(dataAccess);
-        sp.setVisible(true);
-        
+         catalogue();
     }//GEN-LAST:event_btCatalogueActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -166,9 +176,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void btShoppingCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btShoppingCartActionPerformed
-        ShoppingSellerWithToolBar sswtb =  new ShoppingSellerWithToolBar(dataAccess);
-        sswtb.setVisible(true);
-        
+         shoppingCart();
     }//GEN-LAST:event_btShoppingCartActionPerformed
 
     private void btProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btProfileActionPerformed

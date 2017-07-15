@@ -54,6 +54,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         btSignUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/signup-icon.png"))); // NOI18N
         btSignUp.setText("Sign Up");
+        btSignUp.setFocusable(false);
         btSignUp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btSignUp.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btSignUp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
