@@ -33,7 +33,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         initComponents();
         this.datasAccess = dataAccess;  
         ssToolbar.setToolBarListeners();
-        
+        setLocationRelativeTo(null);
     }
     public void menuBack(){
         setVisible(false);

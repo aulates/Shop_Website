@@ -42,6 +42,7 @@ public class MainFrame extends javax.swing.JFrame {
         btLogIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/App-login-manager-icon.png"))); // NOI18N
         btLogIn.setText("Log In");
         btLogIn.setToolTipText("");
+        btLogIn.setFocusable(false);
         btLogIn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btLogIn.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btLogIn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

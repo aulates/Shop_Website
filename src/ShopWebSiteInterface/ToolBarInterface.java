@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
  **
  ** @author Ana Elena Ulate Salas
  **/
-public abstract class ToolBarInterface extends javax.swing.JInternalFrame implements ToolBarMethod{
+public abstract class ToolBarInterface extends javax.swing.JFrame implements ToolBarMethod{
     @Override
     public boolean jbNewActionPerfomed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
