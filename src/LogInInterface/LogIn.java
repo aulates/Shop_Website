@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package LogInInterface;
-
+//imports
 import ShopWebSiteInterface.MainMenu;
 import databaseConnection.DataAccess;
 import java.sql.ResultSet;
@@ -17,19 +17,21 @@ import Queries.User;
 import com.sun.javafx.scene.control.skin.FXVK;
 
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
+// Class LogIn that extends of java swing 
 public class LogIn extends javax.swing.JFrame {
+    //Variable private of Data Base
     private final DataAccess dataAccess;
     /**
      * Creates new form LogIn
      */
+    //Constructor
     public LogIn(DataAccess dataAccess) {
         initComponents();
         setLocationRelativeTo(null);
         this.dataAccess = dataAccess;  
-        
     }
     // go back MainFrame
       public void MenuBack(){
@@ -53,7 +55,7 @@ public class LogIn extends javax.swing.JFrame {
              if (Result.getResultSet().next()){
                  email = Result.getResultSet().getString("email");
                  password = Result.getResultSet().getString("userPassword");
-             }
+             }  // Validation of the email(username) and password exist in Data Base
                  if (email.equals(tfUsername.getText()) && password.equals(passwordText)){
                      users.updateUserState(dataAccess, true, email);
                      setVisible(false);
@@ -69,8 +71,6 @@ public class LogIn extends javax.swing.JFrame {
          }
 
       }
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

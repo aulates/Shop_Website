@@ -4,34 +4,34 @@
  * and open the template in the editor.
  */
 package LogInInterface;
-
+//Imports
 import javax.swing.JOptionPane;
 import databaseConnection.DataAccess;
 import Queries.User;
 import databaseConnection.ResultSetCustomized;
 import java.sql.ResultSet;
-
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
 public class SignUp extends javax.swing.JFrame {
-
+    //Variables
     private final DataAccess dataAccess;
     private final User user = new User();
-
-   
+    //constructor of Sig Up
     public SignUp(DataAccess dataAccess) {
         initComponents();
         setLocationRelativeTo(null);
         this.dataAccess = dataAccess;
         tfAge.setEditable(false);
     }
+    //Back to Main Frame
     public void menuBack() {
         setVisible(false);
         MainFrame mf = new MainFrame(dataAccess);
         mf.setVisible(true);
     }
+    //Method to clear text fields
     public void clearTF() {
         tfName.setText("");
         tfId.setText("");
@@ -41,6 +41,7 @@ public class SignUp extends javax.swing.JFrame {
         tfSocialReasons.setText("");
         pfPassword.setText("");
     }
+    //method 
     public void SellerType() {
         String anwser = cbSellerType.getSelectedItem().toString();
         if (anwser.equals("Company")) {
@@ -54,6 +55,7 @@ public class SignUp extends javax.swing.JFrame {
             tfAge.setEditable(true);
         }
     }
+    //method
     public void UserType() {
         String anwser = cbUserType.getSelectedItem().toString();
         if (anwser.equals("Seller")) {
@@ -70,6 +72,7 @@ public class SignUp extends javax.swing.JFrame {
             tfAge.setEditable(true);
         }
     }
+    //Method to Registrate  User
     public void Registrate() {
         try {
             char [] pass = pfPassword.getPassword();
@@ -90,6 +93,7 @@ public class SignUp extends javax.swing.JFrame {
             System.out.println(e.getMessage());
         }
     }
+    //Registrate tha user, show message and back to the main frame
     public void addUser() {
         Registrate();
         JOptionPane.showMessageDialog(this, "The User is your email", "Welcome to Anita's Shop Website", JOptionPane.INFORMATION_MESSAGE);
@@ -97,6 +101,7 @@ public class SignUp extends javax.swing.JFrame {
         MainFrame mf = new MainFrame(dataAccess);
         mf.setVisible(true);
     }
+    //Validation they all data be not empty
     public void validation(){
         String userType = cbUserType.getSelectedItem().toString();
         String sellerType = cbSellerType.getSelectedItem().toString();

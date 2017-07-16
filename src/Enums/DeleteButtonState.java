@@ -6,18 +6,18 @@
 package Enums;
 
 /**
- *
- * @author Ana Elena Ulate Salas 
- */
+ **
+ ** @author Ana Elena Ulate Salas 
+ **/
+//Enum property of the button with two properties: false or true
 public enum DeleteButtonState {
     Enable(true), Disable(false);
-
+//Variable
     private final boolean enable;
-
+//Getter and setter of the button
     DeleteButtonState(Boolean state) {
         this.enable = state;
     }
-
     public boolean isEnable() {
         return enable;
     }

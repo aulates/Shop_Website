@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Queries;
-
+//Imports
 import databaseConnection.DataAccess;
 import databaseConnection.Result;
 import databaseConnection.ResultSetCustomized;

@@ -4,24 +4,24 @@
  * and open the template in the editor.
  */
 package LogInInterface;
-
+//Imports
 import databaseConnection.DataAccess;
 import javax.swing.JOptionPane;
-
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
 public class MainFrame extends javax.swing.JFrame {
+   //Variable private of DataBase
     private final DataAccess dataAccess;
     /**
-     * Creates new form MainFrame
-     */
+     ** Creates new form MainFrame
+     **/
+    //Constructor
     public MainFrame(DataAccess dataAccess) {
         initComponents();
-        setLocationRelativeTo(null); // centra el frame
+        setLocationRelativeTo(null);
         this.dataAccess = dataAccess;
-        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -109,7 +109,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLogInActionPerformed
-        //llama la ventana de Log In y se oculta la actual
+    //Frame of Login
         setVisible(false);
         LogIn log = new LogIn(dataAccess);
         log.setVisible(true);
@@ -117,7 +117,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btLogInActionPerformed
 
     private void btSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSignUpActionPerformed
-        //llama la ventana Sign Up y se oculta la actual
+        //Frame of Sig Up
         setVisible(false);
         SignUp sign = new SignUp(dataAccess);
         sign.setVisible(true);

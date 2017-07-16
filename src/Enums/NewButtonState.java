@@ -9,15 +9,15 @@ package Enums;
  *
  * @author Ana Elena Ulate Salas 
  */
+//Enum property of the button with two properties: false or true
 public enum NewButtonState {
     Enable(true), Disable(false);
-
+//Variable
     private final boolean enable;
-
+//Getter and setter of the button
     NewButtonState(Boolean state) {
         this.enable = state;
     }
-
     public boolean isEnable() {
         return enable;
     }
