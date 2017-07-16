@@ -35,6 +35,7 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
         setLocationRelativeTo(null);
         this.dataAccess = dataAccess;
         loadData();
+        enableRowSelectionListener();
     }
     public void menuBack(){
         setVisible(false);
@@ -144,12 +145,22 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
         btDelete.setText("Delete");
         btDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeleteActionPerformed(evt);
+            }
+        });
 
         btUpDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btUpDate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Refresh.png"))); // NOI18N
         btUpDate.setText("Update");
         btUpDate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btUpDate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btUpDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btUpDateActionPerformed(evt);
+            }
+        });
 
         cbAmount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99" }));
 
@@ -161,8 +172,8 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btDelete)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btUpDate, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
+                .addComponent(btUpDate, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jLabel1)
@@ -229,8 +240,16 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     }//GEN-LAST:event_miBackActionPerformed
 
     private void btBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuyActionPerformed
-        JOptionPane.showMessageDialog(this, "Your shopping is finished, it will reach your home in a maximmum time of a month", "Information", JOptionPane.INFORMATION_MESSAGE);
+       addBuy();
     }//GEN-LAST:event_btBuyActionPerformed
+
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+        cancelBuy();
+    }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void btUpDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUpDateActionPerformed
+        reloadBuy();
+    }//GEN-LAST:event_btUpDateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -322,7 +341,7 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
         else{
             product.createUserProducts(dataAccess, idUser, this.id, Integer.parseInt(cbAmount.getSelectedItem().toString()));
             product.updateUserProductAmountByUserProductId(dataAccess, remaning, idUserProducts);
-            JOptionPane.showMessageDialog(this, "Added to cart", "Information!!", JOptionPane.INFORMATION_MESSAGE);
+             JOptionPane.showMessageDialog(this, "Your shopping is finished, it will reach your home in a maximmum time of a month", "Information", JOptionPane.INFORMATION_MESSAGE);
 
         }
         if (remaning == 0) {
@@ -335,10 +354,8 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     public void cancelBuy() {
         if(tProducts.getSelectedRow() >= 0){
             if(JOptionPane.showConfirmDialog(this, "Are you sure, you want to delet this product?", "Information!",
-                    JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE ) == JOptionPane.NO_OPTION){
-            }
-            else{
-                int temp = this.id;
+                    JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE ) == JOptionPane.YES_OPTION){
+                int temp = this.idUserProducts;
                 Result result = product.deleteUserProduct(dataAccess, temp);
                 if(!result.isError()){
                     product.deleteProduct(dataAccess, temp);
@@ -353,10 +370,12 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
         else{
             JOptionPane.showMessageDialog(this, "You must select the row to delete it", "Information!", JOptionPane.INFORMATION_MESSAGE);    
         }
+        loadData();
     }
 
     @Override
     public void reloadBuy() {
-        
+        product.updateUserProductAmountByUserProductId(dataAccess, Integer.parseInt(cbAmount.getSelectedItem().toString()), idUserProducts);
+        loadData();
     }
 }
