@@ -71,6 +71,20 @@ public class Product {
         }
         return result;
     }
+    public Result updateUserProductAmountByUserProductId(DataAccess da, int amount, int id){
+        Result result;
+        String sql = "UPDATE " + da.getSchema() + "UserProducts SET amount = ? WHERE id = ?";
+        try {
+            PreparedStatement stmt = da.getConnection().prepareStatement(sql);
+            stmt.setInt(1, amount);
+            stmt.setInt(2, id);
+            result = da.executeSQL(stmt);
+        } catch (SQLException ex) {
+            result = new Result();
+            result.setError(ex.getLocalizedMessage());
+        }
+        return result;
+    }
     public Result updateProductPrice(DataAccess da, int price, String productName){
         Result result;
         String sql = "UPDATE " + da.getSchema() + "Products SET price = ? WHERE productName = ?";
@@ -103,13 +117,13 @@ public class Product {
         }
         return result;
     }
-    public ResultSetCustomized getAllProduct(DataAccess da) {
+    public ResultSetCustomized getAllProduct(DataAccess da,int id) {
         ResultSetCustomized result;
         PreparedStatement stmt;
-        String sql = "SELECT p.id, p.code, p.productName, p.price, p.state, up.amount, p.country FROM " 
+        String sql = "SELECT  up.id,p.id, p.code, p.productName, p.price, p.state, up.amount, p.country FROM " 
                 + da.getSchema() + "Products p JOIN " + da.getSchema() 
                 + "UserProducts up ON p.id = up.id_Product JOIN" + da.getSchema()
-                + "Users u ON up.id_User = u.id;"; 
+                + "Users u ON up.id_User = u.id WHERE u.id = '" + id + "' AND u.user_type = 'Consumer';"; 
         try {
             stmt = da.getConnection().prepareStatement(sql);
             result = da.executeSqlQuery(stmt);
@@ -140,7 +154,7 @@ public class Product {
     public ResultSetCustomized getAllSellersProductForCatalogue(DataAccess da, String code) {
         ResultSetCustomized result;
         PreparedStatement stmt;
-    String sql = "SELECT p.id, p.code, p.productName, p.price, p.state, up.amount, p.country FROM " 
+    String sql = "SELECT up.id,p.id, p.code, p.productName, p.price, p.state, up.amount, p.country FROM " 
                 + da.getSchema() + "Products p JOIN " + da.getSchema() 
                 + "UserProducts up ON p.id = up.id_Product JOIN" + da.getSchema()
                 + "Users u ON up.id_User = u.id WHERE p.code = '" + code + "' AND u.user_type = 'Seller';"; 
@@ -169,7 +183,7 @@ public class Product {
     }
     public Result deleteUserProduct(DataAccess da,int id){
         Result result;
-        String sql = "DELETE FROM " + da.getSchema() + "UserProducts WHERE id_Product = ?;";
+        String sql = "DELETE FROM " + da.getSchema() + "UserProducts WHERE id = ?;";
         try {
             PreparedStatement stmt = da.getConnection().prepareStatement(sql);
             stmt.setInt(1, id);
@@ -181,7 +195,7 @@ public class Product {
         return result;
     }
     public String[] getIdentifiers(){
-        String[] identifiers = {"Id","Code","Product Name","Price","State","Amount","Country"};
+        String[] identifiers = {"Id UserProduct","Id","Code","Product Name","Price","State","Amount","Country"};
         return identifiers;
     }
 }

@@ -6,27 +6,36 @@
 package ShopWebSiteInterface;
 
 import Queries.Product;
+import Queries.User;
 import databaseConnection.DataAccess;
 import databaseConnection.DatabaseUtils;
 import databaseConnection.ResultSetCustomized;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Ana Elena Ulate Salas
  */
-public class Shopping extends javax.swing.JFrame {
+public class Catalogue extends javax.swing.JFrame {
     private DataAccess dataAccess;
+    private int id;
+    private int idUserProducts;
+    private int amoutProduct;
     Product product = new Product();
+    User user = new User();
+    
     /**
      * Creates new form ViewProducts
      */
-    public Shopping(DataAccess dataAccess) {
+    public Catalogue(DataAccess dataAccess) {
         initComponents();
         setLocationRelativeTo(null);
         this.dataAccess = dataAccess;
         loadData();
+        enableRowSelectionListener();
     }
     public void menuBack(){
         setVisible(false);
@@ -45,9 +54,61 @@ public class Shopping extends javax.swing.JFrame {
             DefaultTableModel model = DatabaseUtils.getDefaultTableModel(rs.getResultSet(), product.getIdentifiers());
             tProducts.setModel(model);
             model.fireTableDataChanged();
+            tProducts.removeColumn(tProducts.getColumnModel().getColumn(1));
             tProducts.removeColumn(tProducts.getColumnModel().getColumn(0));
         }
     }
+    private void enableRowSelectionListener(){
+        ListSelectionModel lsm = tProducts.getSelectionModel();
+        lsm.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lsm.addListSelectionListener((ListSelectionEvent e) -> {
+            if (tProducts.getSelectedRow() >= 0)
+                updateWithSelectedRow(tProducts.getSelectedRow());
+        });
+        this.selectFirstRowifExist();
+    }
+    private void selectFirstRowifExist(){
+        if(tProducts.getRowCount() > 0)
+            tProducts.setRowSelectionInterval(0, 0);
+    }
+    private void updateWithSelectedRow(int index){
+        try {
+            this.idUserProducts = (Integer)tProducts.getModel().getValueAt(index, 0);
+            this.id = (Integer) tProducts.getModel().getValueAt(index, 1);
+            this.amoutProduct = (Integer) tProducts.getModel().getValueAt(index, 6);
+        } catch (Exception e) {
+            id = 0;
+        }
+    }
+    public void addProductShoppingCart(){
+        ResultSetCustomized result;
+        result = user.currentUser(dataAccess);
+        int idUser = 0;
+        int amount = Integer.parseInt(cbAmount.getSelectedItem().toString());
+                try {
+                    if (result.getResultSet().next()) {
+                    idUser = result.getResultSet().getInt("id");
+                    
+                     }
+        } catch (Exception e) {
+        }
+                System.out.println(id);
+            System.out.println(idUserProducts);
+        int remaning = this.amoutProduct - amount;
+        if(remaning < 0){
+            JOptionPane.showMessageDialog(this, "Not enough amount of this product.", "Information!", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            product.createUserProducts(dataAccess, idUser, this.id, Integer.parseInt(cbAmount.getSelectedItem().toString()));
+            //product.updateUserProductAmountByUserProductId(dataAccess, remaning, idUserProducts);
+            JOptionPane.showMessageDialog(this, "Added to cart", "Information!!", JOptionPane.INFORMATION_MESSAGE);
+
+        }
+        if (remaning == 0) {
+            product.deleteUserProduct(dataAccess,idUserProducts);
+        }
+        loadData();
+    } 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,7 +121,6 @@ public class Shopping extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cbProducts = new javax.swing.JComboBox<>();
-        btSearch = new javax.swing.JButton();
         btAddShoppingCart = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tProducts = new javax.swing.JTable();
@@ -79,11 +139,11 @@ public class Shopping extends javax.swing.JFrame {
 
         cbProducts.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cbProducts.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Home, Garden & Tools", "Sports & Outdoors", "Food & Grocery", "Automotive & Industrial", "Beauty & Health", "Books & Audible", "Toys, Kids & Baby", "Clothing, Shoes & Jewelry", "Electronics, Computers & Office", "Tablets", "Music" }));
-
-        btSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Zoom-icon.png"))); // NOI18N
-        btSearch.setText("Search");
-        btSearch.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btSearch.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        cbProducts.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbProductsItemStateChanged(evt);
+            }
+        });
 
         btAddShoppingCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/documento-de-archivo-g2176-papel-azul-icono-7267-48.png"))); // NOI18N
         btAddShoppingCart.setText("Add");
@@ -119,44 +179,34 @@ public class Shopping extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btSearch)
-                        .addGap(190, 190, 190)))
-                .addComponent(btAddShoppingCart)
-                .addGap(34, 34, 34))
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btAddShoppingCart, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(141, 141, 141))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btAddShoppingCart)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(cbProducts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btSearch)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btAddShoppingCart)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(cbProducts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -215,8 +265,13 @@ public class Shopping extends javax.swing.JFrame {
     }//GEN-LAST:event_miExitActionPerformed
 
     private void btAddShoppingCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddShoppingCartActionPerformed
-        JOptionPane.showMessageDialog(this, "Added to cart", "Information!!", JOptionPane.INFORMATION_MESSAGE);
+        addProductShoppingCart();
+        
     }//GEN-LAST:event_btAddShoppingCartActionPerformed
+
+    private void cbProductsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProductsItemStateChanged
+        loadData();
+    }//GEN-LAST:event_cbProductsItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -227,7 +282,6 @@ public class Shopping extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAddShoppingCart;
-    private javax.swing.JButton btSearch;
     private javax.swing.JComboBox<String> cbAmount;
     private javax.swing.JComboBox<String> cbProducts;
     private javax.swing.JLabel jLabel1;

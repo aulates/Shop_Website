@@ -39,7 +39,7 @@ public class MainMenu extends javax.swing.JFrame {
     }
     public void catalogue(){
         setVisible(false);
-        Shopping sp = new Shopping(dataAccess);
+        Catalogue sp = new Catalogue(dataAccess);
         sp.setVisible(true);
        
     }
@@ -56,16 +56,44 @@ public class MainMenu extends javax.swing.JFrame {
         }
         if(userType.equals("Consumer")){
             btCatalogue.setEnabled(true);
-            
         }
         else{
             btCatalogue.setEnabled(false);
         }
     }
-    public void shoppingCart(){
-        setVisible(false);
-        ShoppingSellerWithToolBar sswtb =  new ShoppingSellerWithToolBar(dataAccess);
-        sswtb.setVisible(true);
+    public void checkUserTypeForShopping(){
+        ResultSetCustomized result; 
+        result = user.currentUser(dataAccess);
+        String userType = "";
+                try {
+                    if (result.getResultSet().next()) {
+                    userType = result.getResultSet().getString("user_type");
+                     }
+        } catch (Exception e) {
+        }
+        if(userType.equals("Consumer")){
+            setVisible(false);
+            ShoppingCart sc = new ShoppingCart(dataAccess);
+            sc.setVisible(true);
+        }
+        else{
+            setVisible(false);
+            ShoppingSellerWithToolBar sswtb = new ShoppingSellerWithToolBar(dataAccess);
+            sswtb.setVisible(true);
+        }
+    }
+    public void shutDown(){
+        ResultSetCustomized result; 
+        result = user.currentUser(dataAccess);
+        String username = "";
+                try {
+                    if (result.getResultSet().next()) {
+                    username = result.getResultSet().getString("email");
+                        System.out.println(username);
+                     }
+        } catch (Exception e) {
+        }
+        user.updateUserState(dataAccess, false, username);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -82,8 +110,8 @@ public class MainMenu extends javax.swing.JFrame {
         btProfile = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        miBack = new javax.swing.JMenuItem();
+        miExit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -154,23 +182,23 @@ public class MainMenu extends javax.swing.JFrame {
 
         jMenu1.setText("Options");
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/go-back-icon.png"))); // NOI18N
-        jMenuItem1.setText("Back to LogIn");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        miBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/go-back-icon.png"))); // NOI18N
+        miBack.setText("Back to LogIn");
+        miBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                miBackActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(miBack);
 
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/liberar-icono-5826-32.png"))); // NOI18N
-        jMenuItem2.setText("Exit");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        miExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/liberar-icono-5826-32.png"))); // NOI18N
+        miExit.setText("Exit");
+        miExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                miExitActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(miExit);
 
         jMenuBar1.add(jMenu1);
         jMenuBar1.add(jMenu2);
@@ -195,21 +223,23 @@ public class MainMenu extends javax.swing.JFrame {
          catalogue();
     }//GEN-LAST:event_btCatalogueActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-         menuBack();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void miBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBackActionPerformed
+        shutDown();
+        menuBack();
+    }//GEN-LAST:event_miBackActionPerformed
 
     private void btShoppingCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btShoppingCartActionPerformed
-         shoppingCart();
+         checkUserTypeForShopping();
     }//GEN-LAST:event_btShoppingCartActionPerformed
 
     private void btProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btProfileActionPerformed
         profile();
     }//GEN-LAST:event_btProfileActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void miExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miExitActionPerformed
+        shutDown();
         this.dispose();
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_miExitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -225,8 +255,8 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenuItem miBack;
+    private javax.swing.JMenuItem miExit;
     // End of variables declaration//GEN-END:variables
 }

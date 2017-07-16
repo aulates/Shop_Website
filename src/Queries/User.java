@@ -129,7 +129,7 @@ public class User {
     public ResultSetCustomized currentUser(DataAccess da) {
         ResultSetCustomized result;
         PreparedStatement stmt;
-        String sql = "SELECT id, user_type FROM " + da.getSchema() + "Users WHERE isActive = true;";
+        String sql = "SELECT id,email,user_type FROM " + da.getSchema() + "Users WHERE isActive = true;";
         try {
             stmt = da.getConnection().prepareStatement(sql);
             result = da.executeSqlQuery(stmt);

@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  ** @author Ana Elena Ulate Salas
  **/
 public class ShoppingSellerWithToolBar extends ToolBarInterface{
-    private DataAccess datasAccess;
+    private DataAccess dataAccess;
     private Integer id = null;
     private String productNameFilter;
     private String productCodeFilter;
@@ -36,7 +36,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     public ShoppingSellerWithToolBar(DataAccess dataAccess) {
         initComponents();
         setLocationRelativeTo(null);        
-        this.datasAccess = dataAccess; 
+        this.dataAccess = dataAccess; 
         ssToolbar.setToolBarListeners();
         this.setStateOfGroup( jpAtributtes, false);
         this.refreshData(false);
@@ -44,7 +44,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     }
     public void menuBack(){
         setVisible(false);
-        MainMenu mm = new MainMenu(datasAccess);
+        MainMenu mm = new MainMenu(dataAccess);
         mm.setVisible(true);
     }
     private void enableRowSelectionListener(){
@@ -90,7 +90,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         int idUser = 0;
         ResultSetCustomized rs;
         if(!isFiltered){
-            rs = user.currentUser(datasAccess);
+            rs = user.currentUser(dataAccess);
             try {
                 if(rs.getResultSet().next()){
                     idUser = Integer.parseInt(rs.getResultSet().getString("id"));
@@ -98,10 +98,10 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
             } catch (Exception e) {
             }
             
-            rs = product.getAllSellerProduct(datasAccess, idUser);
+            rs = product.getAllSellerProduct(dataAccess, idUser);
         }
         else{
-            rs = product.searchProductByName(datasAccess, productNameFilter, productCodeFilter);
+            rs = product.searchProductByName(dataAccess, productNameFilter, productCodeFilter);
         }
         if(rs.isError()){
             JOptionPane.showMessageDialog(this, rs.getErrorDescription(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -345,7 +345,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     @Override
     public boolean jbSaveActionPerfomed(ActionEvent evt) {
         ResultSetCustomized result; 
-        result = user.currentUser(datasAccess);
+        result = user.currentUser(dataAccess);
         int idUser = 0;
                 try {
                     if (result.getResultSet().next()) {
@@ -357,19 +357,19 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         if(validationLetters() && validationNum()){
             
             if(ssToolbar.isInserting()){
-                int idProduct = product.createProduct(datasAccess, cbCode.getSelectedItem().toString(), 
+                int idProduct = product.createProduct(dataAccess, cbCode.getSelectedItem().toString(), 
                         cbState.getSelectedItem().toString(), cbCountry.getSelectedItem().toString(),
                         tfProductName.getText(), Integer.parseInt(tfPrice.getText()));
                 
                 
                 
                 System.out.println(result.getResultSet().toString());
-                product.createUserProducts(datasAccess,idUser ,
+                product.createUserProducts(dataAccess,idUser ,
                         idProduct, Integer.parseInt(cbAmount.getSelectedItem().toString()));
             }
             else{
-                product.updateProductPrice(datasAccess, Integer.parseInt(tfPrice.getText().toString()), tfProductName.getText());
-                product.updateUserProductAmount(datasAccess, Integer.parseInt(cbAmount.getSelectedItem().toString())
+                product.updateProductPrice(dataAccess, Integer.parseInt(tfPrice.getText().toString()), tfProductName.getText());
+                product.updateUserProductAmount(dataAccess, Integer.parseInt(cbAmount.getSelectedItem().toString())
                         , idUser);
             }
         }
@@ -397,9 +397,9 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
             }
             else{
                 int temp = this.id;
-                Result result = product.deleteUserProduct(datasAccess, temp);
+                Result result = product.deleteUserProduct(dataAccess, temp);
                 if(!result.isError()){
-                    product.deleteProduct(datasAccess, temp);
+                    product.deleteProduct(dataAccess, temp);
                 }
                 else{
                     JOptionPane.showMessageDialog(this, result.getErrorDescription(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -478,5 +478,20 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     void clearTextField() {
         tfPrice.setText("");
         tfProductName.setText("");
+    }
+
+    @Override
+    public void addBuy() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cancelBuy() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reloadBuy() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -20,4 +20,7 @@ public interface ToolBarMethod {
     public boolean jbFilterActionPerfomed(ActionEvent evt);
     public boolean jbReloadActionPerfomed(ActionEvent evt);
     public boolean jbExitActionPerfomed(ActionEvent evt);
+    public void addBuy();
+    public void cancelBuy();
+    public void reloadBuy();
 }

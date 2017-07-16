@@ -4,14 +4,29 @@
  * and open the template in the editor.
  */
 package ShopWebSiteInterface;
+import Queries.Product;
+import Queries.User;
 import databaseConnection.DataAccess;
+import databaseConnection.DatabaseUtils;
+import databaseConnection.Result;
+import databaseConnection.ResultSetCustomized;
+import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Ana Elena Ulate Salas
  */
-public class ShoppingCart extends javax.swing.JFrame {
+public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     private DataAccess dataAccess;
+    private int id;
+    private int idUserProducts;
+    private int amoutProduct;
+    Product product = new Product();
+    User user = new User();
     /**
      * Creates new form ShoppingCart
      */
@@ -19,13 +34,58 @@ public class ShoppingCart extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         this.dataAccess = dataAccess;
+        loadData();
     }
     public void menuBack(){
         setVisible(false);
         MainMenu mm = new MainMenu(dataAccess);
         mm.setVisible(true);
     }
-    
+    public void loadData(){
+        ResultSetCustomized rs;
+        rs = user.currentUser(dataAccess);
+        int idUser = 0;
+                try {
+                    if (rs.getResultSet().next()) {
+                    idUser = rs.getResultSet().getInt("id");
+                    
+                     }
+        } catch (Exception e) {
+        }
+        rs = product.getAllProduct(dataAccess, idUser );
+        if(rs.isError()){
+            JOptionPane.showMessageDialog(this, rs.getErrorDescription(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            DefaultTableModel model = DatabaseUtils.getDefaultTableModel(rs.getResultSet(), product.getIdentifiers());
+            tProducts.setModel(model);
+            model.fireTableDataChanged();
+            tProducts.removeColumn(tProducts.getColumnModel().getColumn(1));
+            tProducts.removeColumn(tProducts.getColumnModel().getColumn(0));
+        }
+    }
+    private void enableRowSelectionListener(){
+        ListSelectionModel lsm = tProducts.getSelectionModel();
+        lsm.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lsm.addListSelectionListener((ListSelectionEvent e) -> {
+            if (tProducts.getSelectedRow() >= 0)
+                updateWithSelectedRow(tProducts.getSelectedRow());
+        });
+        this.selectFirstRowifExist();
+    }
+    private void selectFirstRowifExist(){
+        if(tProducts.getRowCount() > 0)
+            tProducts.setRowSelectionInterval(0, 0);
+    }
+    private void updateWithSelectedRow(int index){
+        try {
+            this.idUserProducts = (Integer)tProducts.getModel().getValueAt(index, 0);
+            this.id = (Integer) tProducts.getModel().getValueAt(index, 1);
+            this.amoutProduct = (Integer) tProducts.getModel().getValueAt(index, 6);
+        } catch (Exception e) {
+            id = 0;
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,7 +103,7 @@ public class ShoppingCart extends javax.swing.JFrame {
         btBuy = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         btUpDate = new javax.swing.JButton();
-        tfAmount = new javax.swing.JComboBox<>();
+        cbAmount = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         miBack = new javax.swing.JMenuItem();
@@ -51,6 +111,7 @@ public class ShoppingCart extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        tProducts.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -90,29 +151,27 @@ public class ShoppingCart extends javax.swing.JFrame {
         btUpDate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btUpDate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        tfAmount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99" }));
+        cbAmount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btBuy)))
-                .addGap(41, 41, 41))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btDelete)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btUpDate, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
+                .addComponent(btBuy)
+                .addGap(41, 41, 41))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,13 +181,13 @@ public class ShoppingCart extends javax.swing.JFrame {
                         .addGap(38, 38, 38)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(tfAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btBuy)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btDelete, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btUpDate, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -185,6 +244,7 @@ public class ShoppingCart extends javax.swing.JFrame {
     private javax.swing.JButton btBuy;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btUpDate;
+    private javax.swing.JComboBox<String> cbAmount;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -193,6 +253,110 @@ public class ShoppingCart extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem miBack;
     private javax.swing.JTable tProducts;
-    private javax.swing.JComboBox<String> tfAmount;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public boolean jbNewActionPerfomed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean jbEditActionPerfomed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean jbSaveActionPerfomed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean jbCancelActionPerfomed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean jbDeleteActionPerfomed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean jbFindActionPerfomed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean jbFilterActionPerfomed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean jbReloadActionPerfomed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean jbExitActionPerfomed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addBuy() {
+        ResultSetCustomized result;
+        result = user.currentUser(dataAccess);
+        int idUser = 0;
+        int amount = Integer.parseInt(cbAmount.getSelectedItem().toString());
+                try {
+                    if (result.getResultSet().next()) {
+                    idUser = result.getResultSet().getInt("id");
+                    
+                     }
+        } catch (Exception e) {
+        }
+                System.out.println(id);
+            System.out.println(idUserProducts);
+        int remaning = this.amoutProduct - amount;
+        if(remaning < 0){
+            JOptionPane.showMessageDialog(this, "Not enough amount of this product.", "Information!", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            product.createUserProducts(dataAccess, idUser, this.id, Integer.parseInt(cbAmount.getSelectedItem().toString()));
+            product.updateUserProductAmountByUserProductId(dataAccess, remaning, idUserProducts);
+            JOptionPane.showMessageDialog(this, "Added to cart", "Information!!", JOptionPane.INFORMATION_MESSAGE);
+
+        }
+        if (remaning == 0) {
+            product.deleteUserProduct(dataAccess,idUserProducts);
+        }
+        loadData();
+    }
+
+    @Override
+    public void cancelBuy() {
+        if(tProducts.getSelectedRow() >= 0){
+            if(JOptionPane.showConfirmDialog(this, "Are you sure, you want to delet this product?", "Information!",
+                    JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE ) == JOptionPane.NO_OPTION){
+            }
+            else{
+                int temp = this.id;
+                Result result = product.deleteUserProduct(dataAccess, temp);
+                if(!result.isError()){
+                    product.deleteProduct(dataAccess, temp);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, result.getErrorDescription(), "Error", JOptionPane.ERROR_MESSAGE);
+                   }
+            }
+            loadData();
+            this.selectFirstRowifExist();
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "You must select the row to delete it", "Information!", JOptionPane.INFORMATION_MESSAGE);    
+        }
+    }
+
+    @Override
+    public void reloadBuy() {
+        
+    }
 }
