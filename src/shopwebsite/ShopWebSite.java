@@ -23,7 +23,7 @@ public class ShopWebSite {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // muestra el primer frame
+        // 
         dataAccess = new DataAccessPostgreSQL("localhost", 5432, "JloveADataBase", "public", "postgres", "11042017");
         Result res = dataAccess.connect();
         if (res.isError()){

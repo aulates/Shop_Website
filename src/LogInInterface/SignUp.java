@@ -41,7 +41,7 @@ public class SignUp extends javax.swing.JFrame {
         tfSocialReasons.setText("");
         pfPassword.setText("");
     }
-    //method 
+    //Method to show/hide frame components
     public void SellerType() {
         String anwser = cbSellerType.getSelectedItem().toString();
         if (anwser.equals("Company")) {
@@ -55,7 +55,7 @@ public class SignUp extends javax.swing.JFrame {
             tfAge.setEditable(true);
         }
     }
-    //method
+    //Method to show/hide frame components
     public void UserType() {
         String anwser = cbUserType.getSelectedItem().toString();
         if (anwser.equals("Seller")) {

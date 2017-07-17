@@ -39,7 +39,7 @@ public class LogIn extends javax.swing.JFrame {
         MainFrame back = new MainFrame(dataAccess);
         back.setVisible(true);  
     }
-      // Class of access to the program, checking that data are in database 
+      // method of access to the program, checking that data are the same data in database 
       public void access(){
         String email = "";
         String password = "";

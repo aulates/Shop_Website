@@ -7,25 +7,26 @@ package ShopWebSiteInterface;
 import databaseConnection.DataAccess;
 import javax.swing.JOptionPane;
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
 public class ShoppingRecords extends javax.swing.JFrame {
      private DataAccess dataAccess;
     /**
-     * Creates new form ShoppingRecords
-     */
+     ** Creates new form ShoppingRecords
+     **/
+     //Constructor
     public ShoppingRecords(DataAccess dataAccess) {
         initComponents();
         setLocationRelativeTo(null);
         this.dataAccess = dataAccess;
     }
+    //Method to go back to profile
     public void menuBack(){
         setVisible(false);
         Profile pf = new Profile(dataAccess);
         pf.setVisible(true);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -129,14 +130,12 @@ public class ShoppingRecords extends javax.swing.JFrame {
     private void miBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBackActionPerformed
         menuBack();
     }//GEN-LAST:event_miBackActionPerformed
-
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
        JOptionPane.showMessageDialog(null, "The program most be started in main class", "Warning", JOptionPane.WARNING_MESSAGE);
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;

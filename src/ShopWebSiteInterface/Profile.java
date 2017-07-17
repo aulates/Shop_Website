@@ -3,33 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+//imports
 package ShopWebSiteInterface;
 import databaseConnection.DataAccess;
 import javax.swing.JOptionPane;
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
 public class Profile extends javax.swing.JFrame {
     private DataAccess dataAccess;
     /**
-     * Creates new form Profile
-     */
+     ** Creates new form Profile
+     **/
+    //Constructor
     public Profile(DataAccess dataAccess) {
         initComponents();
         setLocationRelativeTo(null);
         this.dataAccess = dataAccess;
     }
+    //method to go back to the principal menu
     public void menuBack(){
         setVisible(false);
         MainMenu mm = new MainMenu(dataAccess);
         mm.setVisible(true);
     }
+    //methos to go to aswer comment 
     public void aswerComment(){
         setVisible(false);
         AswerComment ac = new AswerComment(dataAccess);
         ac.setVisible(true);   
     }
+    //method to the stars
     public void Stars(){
         
     }

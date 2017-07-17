@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package ShopWebSiteInterface;
+//imports
 import Queries.Product;
 import Queries.User;
 import databaseConnection.DataAccess;
@@ -15,11 +16,11 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
-
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
+// Class shopping cart implement tool bar methods
 public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     private DataAccess dataAccess;
     private int id;
@@ -28,8 +29,9 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     Product product = new Product();
     User user = new User();
     /**
-     * Creates new form ShoppingCart
-     */
+     ** Creates new form ShoppingCart
+     **/
+    //Constructor
     public ShoppingCart(DataAccess dataAccess) {
         initComponents();
         setLocationRelativeTo(null);
@@ -37,11 +39,13 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
         loadData();
         enableRowSelectionListener();
     }
+    //method to go to the principal menu
     public void menuBack(){
         setVisible(false);
         MainMenu mm = new MainMenu(dataAccess);
         mm.setVisible(true);
     }
+    // method to load data into the Shopping cart table
     public void loadData(){
         ResultSetCustomized rs;
         rs = user.currentUser(dataAccess);
@@ -65,6 +69,7 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
             tProducts.removeColumn(tProducts.getColumnModel().getColumn(0));
         }
     }
+    // Method to allow selection of a row
     private void enableRowSelectionListener(){
         ListSelectionModel lsm = tProducts.getSelectionModel();
         lsm.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -74,10 +79,12 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
         });
         this.selectFirstRowifExist();
     }
+    // method to select the fisrt row if this exist
     private void selectFirstRowifExist(){
         if(tProducts.getRowCount() > 0)
             tProducts.setRowSelectionInterval(0, 0);
     }
+    // method to update the selected row
     private void updateWithSelectedRow(int index){
         try {
             this.idUserProducts = (Integer)tProducts.getModel().getValueAt(index, 0);
@@ -87,7 +94,6 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
             id = 0;
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -250,15 +256,12 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     private void btUpDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUpDateActionPerformed
         reloadBuy();
     }//GEN-LAST:event_btUpDateActionPerformed
-
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         JOptionPane.showMessageDialog(null, "The program most be started in main class", "Warning", JOptionPane.WARNING_MESSAGE);
-    
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBuy;
     private javax.swing.JButton btDelete;
@@ -273,52 +276,44 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     private javax.swing.JMenuItem miBack;
     private javax.swing.JTable tProducts;
     // End of variables declaration//GEN-END:variables
-
+    //ToolBarMethods
     @Override
     public boolean jbNewActionPerfomed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     public boolean jbEditActionPerfomed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     public boolean jbSaveActionPerfomed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     public boolean jbCancelActionPerfomed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     public boolean jbDeleteActionPerfomed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     public boolean jbFindActionPerfomed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     public boolean jbFilterActionPerfomed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     public boolean jbReloadActionPerfomed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     public boolean jbExitActionPerfomed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    //method to finish the buy
     @Override
     public void addBuy() {
         ResultSetCustomized result;
@@ -329,11 +324,9 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
                     if (result.getResultSet().next()) {
                     idUser = result.getResultSet().getInt("id");
                     
-                     }
+                     } 
         } catch (Exception e) {
         }
-                System.out.println(id);
-            System.out.println(idUserProducts);
         int remaning = this.amoutProduct - amount;
         if(remaning < 0){
             JOptionPane.showMessageDialog(this, "Not enough amount of this product.", "Information!", JOptionPane.INFORMATION_MESSAGE);
@@ -342,14 +335,13 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
             product.createUserProducts(dataAccess, idUser, this.id, Integer.parseInt(cbAmount.getSelectedItem().toString()));
             product.updateUserProductAmountByUserProductId(dataAccess, remaning, idUserProducts);
              JOptionPane.showMessageDialog(this, "Your shopping is finished, it will reach your home in a maximmum time of a month", "Information", JOptionPane.INFORMATION_MESSAGE);
-
         }
         if (remaning == 0) {
             product.deleteUserProduct(dataAccess,idUserProducts);
         }
         loadData();
     }
-
+    // method to delete the product of the buy
     @Override
     public void cancelBuy() {
         if(tProducts.getSelectedRow() >= 0){
@@ -372,7 +364,7 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
         }
         loadData();
     }
-
+    //method to update the amount product
     @Override
     public void reloadBuy() {
         product.updateUserProductAmountByUserProductId(dataAccess, Integer.parseInt(cbAmount.getSelectedItem().toString()), idUserProducts);

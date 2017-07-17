@@ -15,9 +15,8 @@ import java.sql.SQLException;
  **
  ** @author Ana Elena Ulate Salas
  **/
-
 public class Product {
-    
+    //Method to create products
     public int createProduct(DataAccess da, String code, String state, String country, String productName, int price) {
         ResultSetCustomized result;
         String sql = "INSERT INTO" + da.getSchema() + "Products(code, state, country, productName, price) VALUES (?, ?, ?, ?,?) returning id;";
@@ -29,7 +28,6 @@ public class Product {
             stmt.setString(4, productName);
             stmt.setInt(5, price); 
             result = da.executeSqlQuery(stmt);
-            
             if (!result.isError() && result.getResultSet().next()) {
                 int id = result.getResultSet().getInt("id");
                 return id;
@@ -42,6 +40,7 @@ public class Product {
         }
         return -1;
     }
+    // method to create the product by user
     public Result createUserProducts(DataAccess da, int id_User, int id_Product, int amount) {
         Result result;
         String sql = "INSERT INTO " + da.getSchema() + "UserProducts(id_User, id_Product, amount) VALUES (?, ?, ?);";
@@ -57,6 +56,7 @@ public class Product {
         }
         return result;
     }
+    // method update product amount in consumer 
     public Result updateUserProductAmount(DataAccess da, int amount, int id){
         Result result;
         String sql = "UPDATE " + da.getSchema() + "UserProducts SET amount = ? WHERE id_User = ?";
@@ -71,6 +71,7 @@ public class Product {
         }
         return result;
     }
+    // method update product amount in seller
     public Result updateUserProductAmountByUserProductId(DataAccess da, int amount, int id){
         Result result;
         String sql = "UPDATE " + da.getSchema() + "UserProducts SET amount = ? WHERE id = ?";
@@ -85,6 +86,7 @@ public class Product {
         }
         return result;
     }
+    // method update the price of the product 
     public Result updateProductPrice(DataAccess da, int price, String productName){
         Result result;
         String sql = "UPDATE " + da.getSchema() + "Products SET price = ? WHERE productName = ?";
@@ -99,6 +101,7 @@ public class Product {
         }
         return result;
     }
+    //method to search the product by name
     public ResultSetCustomized searchProductByName(DataAccess da, String productName, String code) {
         ResultSetCustomized result;
         PreparedStatement stmt;
@@ -117,6 +120,7 @@ public class Product {
         }
         return result;
     }
+    //method to get all products
     public ResultSetCustomized getAllProduct(DataAccess da,int id) {
         ResultSetCustomized result;
         PreparedStatement stmt;
@@ -134,6 +138,7 @@ public class Product {
         }
         return result;
     }
+    // method to get all product of seller
     public ResultSetCustomized getAllSellerProduct(DataAccess da, int id) {
         ResultSetCustomized result;
         PreparedStatement stmt;
@@ -151,6 +156,7 @@ public class Product {
         }
         return result;
     }
+    //method to get all products of seller for catalogue
     public ResultSetCustomized getAllSellersProductForCatalogue(DataAccess da, String code) {
         ResultSetCustomized result;
         PreparedStatement stmt;
@@ -168,6 +174,7 @@ public class Product {
         }
         return result;
     }
+    //method to delete products
     public Result deleteProduct(DataAccess da,int id){
         Result result;
         String sql = "DELETE FROM " + da.getSchema() + "Products WHERE id = ?;";
@@ -181,6 +188,7 @@ public class Product {
         }
         return result;
     }
+    //method to delete products of user
     public Result deleteUserProduct(DataAccess da,int id){
         Result result;
         String sql = "DELETE FROM " + da.getSchema() + "UserProducts WHERE id = ?;";
@@ -194,6 +202,7 @@ public class Product {
         }
         return result;
     }
+    // Method for placing columns in tables
     public String[] getIdentifiers(){
         String[] identifiers = {"Id UserProduct","Id","Code","Product Name","Price","State","Amount","Country"};
         return identifiers;

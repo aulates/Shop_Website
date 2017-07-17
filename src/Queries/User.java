@@ -4,22 +4,20 @@
  * and open the template in the editor.
  */
 package Queries;
-
+// imports
 import databaseConnection.DataAccess;
 import databaseConnection.Result;
 import databaseConnection.ResultSetCustomized;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
 public class User {
-
     private DataAccess dataAccess;
-
+    //method to create user 
     public int createUser(DataAccess da, String email, String userPassword, String userType, String country) {
         ResultSetCustomized result;
         String sql = "INSERT INTO" + da.getSchema() + "Users( email, userPassword, user_type, country) VALUES (?, ?, ?, ?) returning id;";
@@ -30,10 +28,8 @@ public class User {
             stmt.setString(3, userType);
             stmt.setString(4, country);
             result = da.executeSqlQuery(stmt);
-            
             if (!result.isError() && result.getResultSet().next()) {
                 int id = result.getResultSet().getInt("id");
-                System.out.println(id);
                 return id;
             }
            else if(result.isError()){
@@ -44,6 +40,7 @@ public class User {
         }
         return -1;
     }
+    //method to update tha user state in active or unactive
     public Result updateUserState(DataAccess da, boolean isActive, String email){
         Result result;
         String sql = "UPDATE " + da.getSchema() + "Users SET isActive = ? WHERE email = ?";
@@ -58,6 +55,7 @@ public class User {
         }
         return result;
     }
+    //method to select the User password and the email in database
     public ResultSetCustomized LogIn(DataAccess da, String email, String Password) {
         ResultSetCustomized result;
         PreparedStatement stmt;
@@ -65,14 +63,13 @@ public class User {
         try {
             stmt = da.getConnection().prepareStatement(sql);
             result = da.executeSqlQuery(stmt);
-            System.out.println(result.getResultSet().toString());
         } catch (SQLException ex) {
             result = new ResultSetCustomized();
             result.setError(ex.getLocalizedMessage());
         }
         return result;
     }
-
+    //method to create buyer person in database
     public Result createBuyerPerson(DataAccess da, int id_User, String buyerName, String Identification, int age) {
         Result result;
         String sql = "INSERT INTO " + da.getSchema() + "BuyerPerson(id_User, buyerName, identification, age, total) VALUES (?, ?, ?, ?, ?);";
@@ -90,7 +87,7 @@ public class User {
         }
         return result;
     }
-
+    // method to create seller person in database
     public Result createSellerPerson(DataAccess da, int id_User, String sellerName, String Identification, int age) {
         Result result;
         String sql = "INSERT INTO " + da.getSchema() + "SellerPerson(id_User, buyerName, identification, age, total) VALUES (?, ?, ?, ?, ?);";
@@ -108,7 +105,7 @@ public class User {
         }
         return result;
     }
-
+    //method to create seller company
     public Result createSellerCompany(DataAccess da, int id_User, String companyIdentification, String socialReason, String commercialReason) {
         Result result;
         String sql = "INSERT INTO " + da.getSchema() + "SellerCompany(id_User, companyIdentification, socialReason, commercialReason, total) VALUES (?, ?, ?, ?, ?);";
@@ -126,6 +123,7 @@ public class User {
         }
         return result;
     }
+    //method to current user where isActive = true
     public ResultSetCustomized currentUser(DataAccess da) {
         ResultSetCustomized result;
         PreparedStatement stmt;

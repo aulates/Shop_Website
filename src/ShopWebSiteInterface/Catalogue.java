@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package ShopWebSiteInterface;
-
+// imports
 import Queries.Product;
 import Queries.User;
 import databaseConnection.DataAccess;
@@ -14,22 +14,22 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
-
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
 public class Catalogue extends javax.swing.JFrame {
+   // Variables
     private DataAccess dataAccess;
     private int id;
     private int idUserProducts;
     private int amoutProduct;
     Product product = new Product();
     User user = new User();
-    
     /**
-     * Creates new form ViewProducts
-     */
+     ** Creates new form ViewProducts
+     **/
+    //Constructor
     public Catalogue(DataAccess dataAccess) {
         initComponents();
         setLocationRelativeTo(null);
@@ -37,11 +37,13 @@ public class Catalogue extends javax.swing.JFrame {
         loadData();
         enableRowSelectionListener();
     }
+    //method to go back to principal menu
     public void menuBack(){
         setVisible(false);
         MainMenu mm = new MainMenu(dataAccess);
         mm.setVisible(true);
     }
+    // method to load data into the catalog table
     public void loadData(){
         String productCodeFilter;
         productCodeFilter = cbProducts.getSelectedItem().toString();
@@ -58,6 +60,7 @@ public class Catalogue extends javax.swing.JFrame {
             tProducts.removeColumn(tProducts.getColumnModel().getColumn(0));
         }
     }
+    // Method to allow selection of a row
     private void enableRowSelectionListener(){
         ListSelectionModel lsm = tProducts.getSelectionModel();
         lsm.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -67,10 +70,12 @@ public class Catalogue extends javax.swing.JFrame {
         });
         this.selectFirstRowifExist();
     }
+    // method to select the fisrt row if this exist
     private void selectFirstRowifExist(){
         if(tProducts.getRowCount() > 0)
             tProducts.setRowSelectionInterval(0, 0);
     }
+    // method to update the selected row
     private void updateWithSelectedRow(int index){
         try {
             this.idUserProducts = (Integer)tProducts.getModel().getValueAt(index, 0);
@@ -80,6 +85,7 @@ public class Catalogue extends javax.swing.JFrame {
             id = 0;
         }
     }
+    //method to add products in the shopping cart
     public void addProductShoppingCart(){
         ResultSetCustomized result;
         result = user.currentUser(dataAccess);
@@ -92,8 +98,6 @@ public class Catalogue extends javax.swing.JFrame {
                      }
         } catch (Exception e) {
         }
-                System.out.println(id);
-            System.out.println(idUserProducts);
         int remaning = this.amoutProduct - amount;
         if(remaning < 0){
             JOptionPane.showMessageDialog(this, "Not enough amount of this product.", "Information!", JOptionPane.INFORMATION_MESSAGE);
@@ -102,7 +106,6 @@ public class Catalogue extends javax.swing.JFrame {
             product.createUserProducts(dataAccess, idUser, this.id, Integer.parseInt(cbAmount.getSelectedItem().toString()));
             //product.updateUserProductAmountByUserProductId(dataAccess, remaning, idUserProducts);
             JOptionPane.showMessageDialog(this, "Added to cart", "Information!!", JOptionPane.INFORMATION_MESSAGE);
-
         }
         if (remaning == 0) {
             product.deleteUserProduct(dataAccess,idUserProducts);
