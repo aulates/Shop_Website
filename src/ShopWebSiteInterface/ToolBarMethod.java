@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
  **
  ** @author Ana Elena Ulate Salas
  **/
+//interface with Tool Bar Methods
 public interface ToolBarMethod {
     public boolean jbNewActionPerfomed(ActionEvent evt);
     public boolean jbEditActionPerfomed(ActionEvent evt);

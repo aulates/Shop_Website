@@ -8,8 +8,7 @@ package databaseConnection;
  *
  * @author Ana Elena Ulate Salas
  */
-public class Result {
-    
+public class Result {  
     // Attributes to determinate errors 
     private boolean error;
     private String errorDescription;
@@ -26,16 +25,13 @@ public class Result {
     public boolean isError() {
         return error;
     }
-
     public void setError(boolean error) {
         this.error = error;
     }
-    
     public void setError(String errorDescription) {
         this.error = true;
         this.errorDescription = errorDescription;
     }
-
     public String getErrorDescription() {
         return errorDescription;
     }

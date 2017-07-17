@@ -4,26 +4,24 @@
  * and open the template in the editor.
  */
 package shopwebsite;
+//imports
 import LogInInterface.LogIn;
 import LogInInterface.MainFrame;
 import databaseConnection.DataAccess;
 import databaseConnection.DataAccessPostgreSQL;
 import databaseConnection.Result;
 import javax.swing.JOptionPane;
-
-
 /**
  **
  ** @author Ana Elena Ulate Salas
  **/
 public class ShopWebSite {
     static DataAccess dataAccess;
-    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // 
+        // Instance of the connection to the database with the necessary information
         dataAccess = new DataAccessPostgreSQL("localhost", 5432, "JloveADataBase", "public", "postgres", "11042017");
         Result res = dataAccess.connect();
         if (res.isError()){

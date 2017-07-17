@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
  **
  ** @author Ana Elena Ulate Salas
  **/
+// Abstract class extends to JFrame and implements Tool Bar Method
 public abstract class ToolBarInterface extends javax.swing.JFrame implements ToolBarMethod{
     abstract boolean validationNum();
     abstract boolean validationLetters();

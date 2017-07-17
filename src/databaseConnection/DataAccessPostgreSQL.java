@@ -15,5 +15,4 @@ public class DataAccessPostgreSQL extends DataAccess {
         super(server, port, database, schema, username, password, TypeOfDatabase.PostgreSQL);
         connectionString = TypeOfDatabase.PostgreSQL.getConnectionString() + server + ":" + port + "/" + database + "?searchpath=" + schema;
     }
-
 }

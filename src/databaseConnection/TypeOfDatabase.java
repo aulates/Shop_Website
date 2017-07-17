@@ -5,13 +5,13 @@ package databaseConnection;
  * and open the template in the editor.
  */
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
 public enum TypeOfDatabase {
     MySQL(1, "MySQL Server", "com.mysql.jdbc.Driver", "jdbc:mysql://"),
     PostgreSQL(2, "PostgreSQL", "org.postgresql.Driver", "jdbc:postgresql://");
-    
+   //variables 
     private final int id;
     private final String description;
     private final String driver;

@@ -1,25 +1,21 @@
 package databaseConnection;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
+//imports
 import java.sql.Connection; 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 /**
- *
- * @author Ana Elena Ulate Salas
- */
-public abstract class DataAccess {
-    
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
+public abstract class DataAccess { 
     // Data Base Attributes
     protected final String server;
     protected final int port;
@@ -27,7 +23,6 @@ public abstract class DataAccess {
     protected final String schema;
     protected final String username;
     protected final String password;
-    
     // Connection management for the Data Base
     protected String connectionString;
     protected Connection connection;

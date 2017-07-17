@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package ShopWebSiteInterface;
-
+//imporst
 import Queries.Product;
 import Queries.User;
 import databaseConnection.DataAccess;
@@ -18,12 +18,13 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
-
 /**
  **
  ** @author Ana Elena Ulate Salas
  **/
+// class that extends to Tool Bar Interface
 public class ShoppingSellerWithToolBar extends ToolBarInterface{
+    // Variables
     private DataAccess dataAccess;
     private Integer id = null;
     private String productNameFilter;
@@ -31,8 +32,9 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     Product product = new Product();
     User user = new User();
     /**
-     * Creates new form ShoppingSeller
-     */
+     ** Creates new form ShoppingSeller
+     **/
+    //Constructor
     public ShoppingSellerWithToolBar(DataAccess dataAccess) {
         initComponents();
         setLocationRelativeTo(null);        
@@ -42,11 +44,13 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         this.refreshData(false);
         this.enableRowSelectionListener();
     }
+    //Metehod to go go back to ma principal menu
     public void menuBack(){
         setVisible(false);
         MainMenu mm = new MainMenu(dataAccess);
         mm.setVisible(true);
     }
+    // Method to allow selection of a row
     private void enableRowSelectionListener(){
         ListSelectionModel lsm = tAddProducts.getSelectionModel();
         lsm.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -55,7 +59,8 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
                 updateWithSelectedRow(tAddProducts.getSelectedRow());
         });
         this.selectFirstRowifExist();
-    }
+    }    
+    // method to update the selected row
     private void updateWithSelectedRow(int index){
         try {
             this.id = (Integer) tAddProducts.getModel().getValueAt(index, 0);
@@ -70,20 +75,24 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
             clearTextField();
         }
     }
+    // method to select the fisrt row if this exist
     private void selectFirstRowifExist(){
         if(tAddProducts.getRowCount() > 0)
             tAddProducts.setRowSelectionInterval(0, 0);
     }
+    //Method for concentrating the table in name and code
     private void primaryControlRequestFocus(){
         this.tfProductName.requestFocus();
         this.cbCode.requestFocus();
     }
+    //Method to initialize the state of the buttons
     private void setStateOfGroup(JPanel panelGroup, Boolean state){
         for (Component c: panelGroup.getComponents()){
             c.setEnabled(state);
         }
         this.tAddProducts.setEnabled(!state);
     }
+    //Method to refresh table data showing the products being added
     private void refreshData(boolean isFiltered){
         productNameFilter = tfProductName.getText();
         productCodeFilter = cbCode.getSelectedItem().toString();
@@ -292,10 +301,9 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     private void miBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBackActionPerformed
        menuBack();
     }//GEN-LAST:event_miBackActionPerformed
-
     /**
-     * @param args the command line arguments
-     */
+     ** @param args the command line arguments
+     **/
     public static void main(String args[]) {
       JOptionPane.showMessageDialog(null, "The program most be started in main class", "Warning", JOptionPane.WARNING_MESSAGE);
     }
@@ -321,7 +329,8 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     private javax.swing.JTextField tfPrice;
     private javax.swing.JTextField tfProductName;
     // End of variables declaration//GEN-END:variables
-
+    // methods of tool bar method
+    // method to create new product
     @Override
     public boolean jbNewActionPerfomed(ActionEvent evt) {
         this.clearTextField();
@@ -330,6 +339,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         this.tfPrice.requestFocus();
         return true;
     }
+    //method to edit product
     @Override
     public boolean jbEditActionPerfomed(ActionEvent evt) {
         if(tAddProducts.getSelectedRow() >= 0){
@@ -342,6 +352,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
             return false;
         }
     }
+    //method to save products
     @Override
     public boolean jbSaveActionPerfomed(ActionEvent evt) {
         ResultSetCustomized result; 
@@ -360,11 +371,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
                 int idProduct = product.createProduct(dataAccess, cbCode.getSelectedItem().toString(), 
                         cbState.getSelectedItem().toString(), cbCountry.getSelectedItem().toString(),
                         tfProductName.getText(), Integer.parseInt(tfPrice.getText()));
-                
-                
-                
-                System.out.println(result.getResultSet().toString());
-                product.createUserProducts(dataAccess,idUser ,
+                        product.createUserProducts(dataAccess,idUser ,
                         idProduct, Integer.parseInt(cbAmount.getSelectedItem().toString()));
             }
             else{
@@ -379,7 +386,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         this.selectFirstRowifExist();
         return true;
     }
-
+    //method to cancel actions
     @Override
     public boolean jbCancelActionPerfomed(ActionEvent evt) {
         this.clearTextField();
@@ -387,7 +394,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         this.updateWithSelectedRow(tAddProducts.getSelectedRow());
         return true;
     }
-
+    //method to delete products
     @Override
     public boolean jbDeleteActionPerfomed(ActionEvent evt) {
         if(tAddProducts.getSelectedRow() >= 0){
@@ -415,7 +422,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
             return false;    
         }
     }
-
+    //method to search products
     @Override
     public boolean jbFindActionPerfomed(ActionEvent evt) {
         this.clearTextField();
@@ -423,7 +430,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         this.primaryControlRequestFocus();
         return true;
     }
-
+    // method to filter the search
     @Override
     public boolean jbFilterActionPerfomed(ActionEvent evt) {
         refreshData(true);
@@ -432,7 +439,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         selectFirstRowifExist();
         return true;
     }
-
+    //method too reload 
     @Override
     public boolean jbReloadActionPerfomed(ActionEvent evt) {
         clearTextField();
@@ -440,12 +447,12 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         selectFirstRowifExist();
         return true;
     }
-
+    //method to exit the action
     @Override
     public boolean jbExitActionPerfomed(ActionEvent evt) {
         return true;
     }
-
+    //method to validation of numbers
     @Override
     boolean validationNum() {
         char[] num;
@@ -463,6 +470,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         }
         return state;
     }
+    //validation to validation letters
     @Override
     boolean validationLetters() {
         boolean state;
@@ -479,17 +487,14 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
         tfPrice.setText("");
         tfProductName.setText("");
     }
-
     @Override
     public void addBuy() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     public void cancelBuy() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     public void reloadBuy() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

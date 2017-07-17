@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package ShopWebSiteInterface;
-
+//imports class from Enum package
 import Enums.CancelButtonState;
 import Enums.ExitButtonState;
 import Enums.FilterButtonState;
@@ -20,19 +20,19 @@ import javax.swing.JOptionPane;
  **
  ** @author Ana Elena Ulate Salas
  **/
+//frame Toolbar
 public class Toolbar extends javax.swing.JPanel {
-    
+    //variables
     private ToolBarInterface jifWTParent;
     private boolean toolbarOnFilteredMode;
     private boolean toolbarOnFindingMode;
-    
     private boolean inserting;
     private boolean updating;
     private boolean filtered;
-
     /**
-     * Creates new form JPanelCRUDToolBar
-     */
+     ** Creates new form JPanelCRUDToolBar
+     **/
+    //Constructor
     public Toolbar() {
         initComponents();
         this.toolbarOnFilteredMode = false;
@@ -40,12 +40,10 @@ public class Toolbar extends javax.swing.JPanel {
         this.inserting = false;
         this.updating = false;
         this.filtered = false;
-        
         this.jtbCRUDToolBar.setFloatable(false);
         this.defaultModeStateOfButtons();
         this.setVisibilityFindAndFilterButtons();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -144,7 +142,6 @@ public class Toolbar extends javax.swing.JPanel {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
     // <editor-fold defaultstate="collapsed" desc="Toolbar listeners">
     /**
      * Programa los Listeners que hace funcionar el JPanelCRUDToolbar en un

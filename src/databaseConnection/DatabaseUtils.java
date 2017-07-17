@@ -11,9 +11,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
 public class DatabaseUtils {
     //First method works for making a table model by default by getting and placing the identifiers inside the model
     static public DefaultTableModel getDefaultTableModel(ResultSet rs, String[] indetifiers)

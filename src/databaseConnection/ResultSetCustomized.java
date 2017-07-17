@@ -6,9 +6,9 @@ package databaseConnection;
  */
 import java.sql.ResultSet;
 /**
- *
- * @author Ana Elena Ulate Salas
- */
+ **
+ ** @author Ana Elena Ulate Salas
+ **/
 // inheritance from class Result
 public class ResultSetCustomized extends Result { 
     private ResultSet resultSet;
