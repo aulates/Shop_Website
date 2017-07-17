@@ -275,14 +275,12 @@ public class Catalogue extends javax.swing.JFrame {
     private void cbProductsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProductsItemStateChanged
         loadData();
     }//GEN-LAST:event_cbProductsItemStateChanged
-
-    /**
+/**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         JOptionPane.showMessageDialog(null, "The program most be started in main class", "Warning", JOptionPane.WARNING_MESSAGE);
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAddShoppingCart;
     private javax.swing.JComboBox<String> cbAmount;

@@ -4,14 +4,21 @@
  * and open the template in the editor.
  */
 package ShopWebSiteInterface;
+import Queries.Product;
+import Queries.User;
 import databaseConnection.DataAccess;
+import databaseConnection.DatabaseUtils;
+import databaseConnection.ResultSetCustomized;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  **
  ** @author Ana Elena Ulate Salas
  **/
 public class ShoppingRecords extends javax.swing.JFrame {
      private DataAccess dataAccess;
+     Product product = new Product();
+     User user = new User();
     /**
      ** Creates new form ShoppingRecords
      **/
@@ -38,17 +45,17 @@ public class ShoppingRecords extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tRecords = new javax.swing.JTable();
         lbTotal = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        taShoppings = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         miBack = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tRecords.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -59,13 +66,13 @@ public class ShoppingRecords extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tRecords);
 
         lbTotal.setText("$0.000.000.000");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        taShoppings.setColumns(20);
+        taShoppings.setRows(5);
+        jScrollPane2.setViewportView(taShoppings);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -142,9 +149,9 @@ public class ShoppingRecords extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lbTotal;
     private javax.swing.JMenuItem miBack;
+    private javax.swing.JTable tRecords;
+    private javax.swing.JTextArea taShoppings;
     // End of variables declaration//GEN-END:variables
 }

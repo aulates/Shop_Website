@@ -35,8 +35,13 @@ public class Profile extends javax.swing.JFrame {
         ac.setVisible(true);   
     }
     //method to the stars
-    public void Stars(){
+    public void stars(){
         
+    }
+    public void shoppingRecords(){
+        ShoppingRecords sr = new ShoppingRecords(dataAccess);
+        setVisible(false);
+        sr.setVisible(true);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,7 +63,7 @@ public class Profile extends javax.swing.JFrame {
         taComments = new javax.swing.JTextArea();
         btAnswerComment = new javax.swing.JButton();
         lbStars = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        bShoppingRecords = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -113,13 +118,13 @@ public class Profile extends javax.swing.JFrame {
         lbStars.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lbStars.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/five-Stars.png"))); // NOI18N
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/product-icon.png"))); // NOI18N
-        jButton1.setText("Shopping Records");
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bShoppingRecords.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/product-icon.png"))); // NOI18N
+        bShoppingRecords.setText("Shopping Records");
+        bShoppingRecords.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bShoppingRecords.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bShoppingRecords.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bShoppingRecordsActionPerformed(evt);
             }
         });
 
@@ -134,7 +139,7 @@ public class Profile extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bShoppingRecords, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(lbStars)
                                 .addGap(21, 21, 21))
@@ -160,7 +165,7 @@ public class Profile extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lbStars, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(bShoppingRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -210,9 +215,9 @@ public class Profile extends javax.swing.JFrame {
         aswerComment();
     }//GEN-LAST:event_btAnswerCommentActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void bShoppingRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bShoppingRecordsActionPerformed
+        shoppingRecords();
+    }//GEN-LAST:event_bShoppingRecordsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -223,8 +228,8 @@ public class Profile extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bShoppingRecords;
     private javax.swing.JButton btAnswerComment;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;

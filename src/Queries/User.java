@@ -131,7 +131,6 @@ public class User {
         try {
             stmt = da.getConnection().prepareStatement(sql);
             result = da.executeSqlQuery(stmt);
-            System.out.println(result);
         } catch (SQLException ex) {
             result = new ResultSetCustomized();
             result.setError(ex.getLocalizedMessage());
