@@ -54,7 +54,6 @@ public class MainMenu extends javax.swing.JFrame {
                 try {
                     if (result.getResultSet().next()) {
                     userType = result.getResultSet().getString("user_type");
-                        System.out.println(userType);
                      }
         } catch (Exception e) {
         }

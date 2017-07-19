@@ -7,40 +7,42 @@ package ShopWebSiteInterface;
 
 import Queries.CommentsAndStars;
 import databaseConnection.DataAccess;
+import databaseConnection.Result;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Ana Elena Ulate Salas
  */
-public class AswerComment extends javax.swing.JFrame {
+public class MakeComment extends javax.swing.JFrame {
     private DataAccess dataAccess;
-    private int id;
+    private int idUserProduct;
     CommentsAndStars cmm = new CommentsAndStars();
-
     /**
      * Creates new form AswerComment
      */
-    public AswerComment(DataAccess dataAccess, int id) {
+    public MakeComment(DataAccess dataAccess, int idUserProduct) {
         initComponents();
         setLocationRelativeTo(null);
         this.dataAccess = dataAccess;
-        this.id = id;
+        this.idUserProduct = idUserProduct;
     }
     public void menuBack(){
         setVisible(false);
-        Profile pf = new Profile(dataAccess);
-        pf.setVisible(true);
+        ShoppingCart sc = new ShoppingCart(dataAccess);
+        sc.setVisible(true);
     }
-    public void respond(){
+    
+    public void createComment(){
         if (!taComment.getText().equals("")) {
-            cmm.updateCommentsAndStars(dataAccess, taComment.getText(), Integer.parseInt(cbStars.getSelectedItem().toString()), id);
-            JOptionPane.showMessageDialog(this, "Response uploaded", "Notification", JOptionPane.INFORMATION_MESSAGE);
+            cmm.createCommentsAndStars(dataAccess, taComment.getText(), Integer.parseInt(cbStars.getSelectedItem().toString()), idUserProduct);
             menuBack();
         }else{
-        JOptionPane.showMessageDialog(this, "All data needed", "Notification", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "All data most be entered", "Information", JOptionPane.INFORMATION_MESSAGE);
         }
+        
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -156,7 +158,7 @@ public class AswerComment extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoadActionPerformed
-        respond();
+        createComment();
     }//GEN-LAST:event_btLoadActionPerformed
 
     private void miBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBackActionPerformed

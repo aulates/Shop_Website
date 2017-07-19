@@ -137,4 +137,19 @@ public class User {
         }
         return result;
     }
+    public ResultSetCustomized getName(DataAccess da){
+        ResultSetCustomized result;
+        PreparedStatement stmt;
+    String sql = "SELECT email "
+            + "FROM" + da.getSchema() +"Users WHERE isActive = true;"; 
+        try {
+            stmt = da.getConnection().prepareStatement(sql);
+            result = da.executeSqlQuery(stmt);
+            
+        } catch (SQLException ex) {
+            result = new ResultSetCustomized();
+            result.setError(ex.getLocalizedMessage());
+        }
+        return result;
+    }
 }

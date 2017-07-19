@@ -119,6 +119,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
             DefaultTableModel model = DatabaseUtils.getDefaultTableModel(rs.getResultSet(), product.getIdentifiers());
             tAddProducts.setModel(model);
             model.fireTableDataChanged();
+            tAddProducts.removeColumn(tAddProducts.getColumnModel().getColumn(1)); 
             tAddProducts.removeColumn(tAddProducts.getColumnModel().getColumn(0));
         }
     }
@@ -370,7 +371,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
             if(ssToolbar.isInserting()){
                 int idProduct = product.createProduct(dataAccess, cbCode.getSelectedItem().toString(), 
                         cbState.getSelectedItem().toString(), cbCountry.getSelectedItem().toString(),
-                        tfProductName.getText(), Integer.parseInt(tfPrice.getText()));
+                        tfProductName.getText(), Integer.parseInt(tfPrice.getText()),idUser);
                         product.createUserProducts(dataAccess,idUser ,
                         idProduct, Integer.parseInt(cbAmount.getSelectedItem().toString()));
             }

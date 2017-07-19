@@ -25,7 +25,8 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     private DataAccess dataAccess;
     private int id;
     private int idUserProducts;
-    private int amoutProduct;
+    private int amountProduct;
+    private int idSeller;
     Product product = new Product();
     User user = new User();
     /**
@@ -62,9 +63,10 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
             JOptionPane.showMessageDialog(this, rs.getErrorDescription(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         else{
-            DefaultTableModel model = DatabaseUtils.getDefaultTableModel(rs.getResultSet(), product.getIdentifiers());
+            DefaultTableModel model = DatabaseUtils.getDefaultTableModel(rs.getResultSet(), product.getIdentifiersCostum());
             tProducts.setModel(model);
             model.fireTableDataChanged();
+            tProducts.removeColumn(tProducts.getColumnModel().getColumn(2));
             tProducts.removeColumn(tProducts.getColumnModel().getColumn(1));
             tProducts.removeColumn(tProducts.getColumnModel().getColumn(0));
         }
@@ -89,10 +91,16 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
         try {
             this.idUserProducts = (Integer)tProducts.getModel().getValueAt(index, 0);
             this.id = (Integer) tProducts.getModel().getValueAt(index, 1);
-            this.amoutProduct = (Integer) tProducts.getModel().getValueAt(index, 6);
+            this.idSeller = (Integer) tProducts.getModel().getValueAt(index, 2);
+            this.amountProduct = (Integer) tProducts.getModel().getValueAt(index, 7);
         } catch (Exception e) {
             id = 0;
         }
+    }
+    private void comment(){
+        MakeComment mc = new MakeComment(dataAccess, idUserProducts);
+        setVisible(false);
+        mc.setVisible(true);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -246,7 +254,8 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     }//GEN-LAST:event_miBackActionPerformed
 
     private void btBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuyActionPerformed
-       addBuy();
+        comment();
+        addBuy();
     }//GEN-LAST:event_btBuyActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
@@ -320,24 +329,33 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
         result = user.currentUser(dataAccess);
         int idUser = 0;
         int amount = Integer.parseInt(cbAmount.getSelectedItem().toString());
-                try {
-                    if (result.getResultSet().next()) {
-                    idUser = result.getResultSet().getInt("id");
-                    
-                     } 
+        int choosed = this.amountProduct - amount;
+        try {
+            if (result.getResultSet().next()) {
+            idUser = result.getResultSet().getInt("id");
+            }         
         } catch (Exception e) {
         }
-        int remaning = this.amoutProduct - amount;
+        result = product.getAmount(dataAccess, id);
+        try {
+            if (result.getResultSet().next()) {
+            amountProduct = result.getResultSet().getInt("amount");
+            }         
+        } catch (Exception e) {
+        }
+        int remaning = this.amountProduct - amount;
+        System.out.println(remaning);
         if(remaning < 0){
             JOptionPane.showMessageDialog(this, "Not enough amount of this product.", "Information!", JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            product.createUserProducts(dataAccess, idUser, this.id, Integer.parseInt(cbAmount.getSelectedItem().toString()));
-            product.updateUserProductAmountByUserProductId(dataAccess, remaning, idUserProducts);
-             JOptionPane.showMessageDialog(this, "Your shopping is finished, it will reach your home in a maximmum time of a month", "Information", JOptionPane.INFORMATION_MESSAGE);
+            
+            product.boughtProduct(dataAccess, true, idUserProducts);
+            product.updateUserProductAmountByIdSeller(dataAccess, remaning, id);
+            JOptionPane.showMessageDialog(this, "Your shopping is finished, it will reach your home in a maximmum time of a month", "Information", JOptionPane.INFORMATION_MESSAGE);
         }
         if (remaning == 0) {
-            product.deleteUserProduct(dataAccess,idUserProducts);
+            //product.deleteUserProduct(dataAccess,idUserProducts);
         }
         loadData();
     }

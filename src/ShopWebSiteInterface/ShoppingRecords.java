@@ -9,16 +9,27 @@ import Queries.User;
 import databaseConnection.DataAccess;
 import databaseConnection.DatabaseUtils;
 import databaseConnection.ResultSetCustomized;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 /**
  **
  ** @author Ana Elena Ulate Salas
  **/
 public class ShoppingRecords extends javax.swing.JFrame {
-     private DataAccess dataAccess;
-     Product product = new Product();
-     User user = new User();
+    private DataAccess dataAccess;
+    private int id;
+    private int idUser;
+    private int idUserProducts;
+    private int amountProduct;
+    private String productName;
+    private int price;
+    private int total;
+    Product product = new Product();
+    User user = new User();
     /**
      ** Creates new form ShoppingRecords
      **/
@@ -27,12 +38,85 @@ public class ShoppingRecords extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         this.dataAccess = dataAccess;
+        loadData();
+        enableRowSelectionListener();
+        loadLbl();
     }
     //Method to go back to profile
     public void menuBack(){
         setVisible(false);
         Profile pf = new Profile(dataAccess);
         pf.setVisible(true);
+    }
+    public void loadLbl(){
+        ResultSetCustomized rsc = product.getTotal(dataAccess, idUser);
+        int res = 0;
+        try {
+            if (rsc.getResultSet().next()) {
+                res = rsc.getResultSet().getInt("sum");
+            }
+        } catch (Exception e) {
+        };
+        lbTotal.setText("Total in shops: $" +Integer.toString(res));
+        
+    }
+    public void loadData(){
+        ResultSetCustomized rs;
+        rs = user.currentUser(dataAccess);;
+                try {
+                    if (rs.getResultSet().next()) {
+                    idUser = rs.getResultSet().getInt("id");
+                    
+                     }
+        } catch (Exception e) {
+        }
+        rs = product.getBoughtProducts(dataAccess, idUser );
+        if(rs.isError()){
+            JOptionPane.showMessageDialog(this, rs.getErrorDescription(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            DefaultTableModel model = DatabaseUtils.getDefaultTableModel(rs.getResultSet(), product.getIdentifiers());
+            tRecords.setModel(model);
+            model.fireTableDataChanged();
+            tRecords.removeColumn(tRecords.getColumnModel().getColumn(7));
+            tRecords.removeColumn(tRecords.getColumnModel().getColumn(6));
+            tRecords.removeColumn(tRecords.getColumnModel().getColumn(5));
+            tRecords.removeColumn(tRecords.getColumnModel().getColumn(4));
+            tRecords.removeColumn(tRecords.getColumnModel().getColumn(3));
+            tRecords.removeColumn(tRecords.getColumnModel().getColumn(2));
+            tRecords.removeColumn(tRecords.getColumnModel().getColumn(1));
+        }
+    }
+    // Method to allow selection of a row
+    private void enableRowSelectionListener(){
+        ListSelectionModel lsm = tRecords.getSelectionModel();
+        lsm.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lsm.addListSelectionListener((ListSelectionEvent e) -> {
+            if (tRecords.getSelectedRow() >= 0)
+                updateWithSelectedRow(tRecords.getSelectedRow());
+        });
+        this.selectFirstRowifExist();
+    }
+    // method to select the fisrt row if this exist
+    private void selectFirstRowifExist(){
+        if(tRecords.getRowCount() > 0)
+            tRecords.setRowSelectionInterval(0, 0);
+    }
+    // method to update the selected row
+    private void updateWithSelectedRow(int index){
+        try {
+            this.idUserProducts = (Integer)tRecords.getModel().getValueAt(index, 0);
+            this.id = (Integer) tRecords.getModel().getValueAt(index, 1);
+            this.amountProduct = (Integer) tRecords.getModel().getValueAt(index, 6);
+            this.productName = (String) tRecords.getModel().getValueAt(index, 3);
+            this.price = (Integer) tRecords.getModel().getValueAt(index, 4); 
+            this.total = this.price * this.amountProduct;
+            String message = "Product: " + productName + "\nAmount: " + amountProduct 
+                    + "\nPrice: " + price + "\nTotal: " + total;
+            taShoppings.setText(message);
+        } catch (Exception e) {
+            id = 0;
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,6 +139,7 @@ public class ShoppingRecords extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        tRecords.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         tRecords.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -85,16 +170,16 @@ public class ShoppingRecords extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(71, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(30, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lbTotal)
@@ -120,9 +205,7 @@ public class ShoppingRecords extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
