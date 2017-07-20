@@ -39,6 +39,11 @@ public class LogIn extends javax.swing.JFrame {
         MainFrame back = new MainFrame(dataAccess);
         back.setVisible(true);  
     }
+     // method to clear text field
+      public void clearTF(){
+          tfUsername.setText("");
+          pfPassword.setText("");
+      }
       // method of access to the program, checking that data are the same data in database 
       public void access(){
         String email = "";
@@ -53,8 +58,8 @@ public class LogIn extends javax.swing.JFrame {
         Result =  users.LogIn(dataAccess, tfUsername.getText(), passwordText);
          try {
              if (Result.getResultSet().next()){
-                 email = Result.getResultSet().getString("email");
-                 password = Result.getResultSet().getString("userPassword");
+                 email = Result.getResultSet().getString("email").trim();
+                 password = Result.getResultSet().getString("userPassword").trim();
              }  // Validation of the email(username) and password exist in Data Base
                  if (email.equals(tfUsername.getText()) && password.equals(passwordText)){
                      users.updateUserState(dataAccess, true, email);
@@ -64,6 +69,7 @@ public class LogIn extends javax.swing.JFrame {
                  }
                  else{
                      JOptionPane.showMessageDialog(this, "Username or Password wrong", "Information", JOptionPane.ERROR_MESSAGE);
+                     clearTF();
                  }
 
          } catch (SQLException ex) {

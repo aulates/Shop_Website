@@ -17,7 +17,7 @@ import java.sql.SQLException;
  */
 public class CommentsAndStars {
         private DataAccess dataAccess;
-
+    //method to create comments and stars
     public Result createCommentsAndStars(DataAccess da, String commentary, int starsSeller, int id_UserProducts) {
         Result result;
         String sql = "INSERT INTO " + da.getSchema() + "CommentsAndStars(commentary, starsSeller, id_UserProducts) VALUES (?, ?, ?);";
@@ -33,6 +33,7 @@ public class CommentsAndStars {
         }
         return result;
     }
+    //method to update comments and stars
     public Result updateCommentsAndStars(DataAccess da, String response, int starsConsumer,int id){
         Result result;
         String sql = "UPDATE " + da.getSchema() + "CommentsAndStars SET response = ?, starsConsumer = ? WHERE id_UserProducts = ?";
@@ -48,10 +49,12 @@ public class CommentsAndStars {
         }
         return result;
     }
+    //method to get identifiers of the table comments and stars
     public String[] getIdentifiers(){
         String[] identifiers = {"Id","Commentary","Stars Seller","Response","Stars Consummer","Sale"};
         return identifiers;
     }
+    // method to get seller comments
     public ResultSetCustomized getSellerComments(DataAccess da, int idSeller) {
         ResultSetCustomized result;
         PreparedStatement stmt;
@@ -67,6 +70,7 @@ public class CommentsAndStars {
         }
         return result;
     }
+    //method to get buyer comments
     public ResultSetCustomized getBuyerComments(DataAccess da) {
         ResultSetCustomized result;
         PreparedStatement stmt;

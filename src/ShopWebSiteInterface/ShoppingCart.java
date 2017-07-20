@@ -97,6 +97,7 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
             id = 0;
         }
     }
+    // method to view windows of comments
     private void comment(){
         MakeComment mc = new MakeComment(dataAccess, idUserProducts);
         setVisible(false);

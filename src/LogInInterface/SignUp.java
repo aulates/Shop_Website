@@ -77,11 +77,10 @@ public class SignUp extends javax.swing.JFrame {
         try {
             char [] pass = pfPassword.getPassword();
             String password = "";
-            System.out.println(pass);
             for (char p : pass ){
                 password += p;
             }
-            int id = user.createUser(dataAccess, tfEmail.getText(), password , cbUserType.getSelectedItem().toString(), cbCountry.getSelectedItem().toString());
+            int id = user.createUser(dataAccess, tfEmail.getText().trim(), password , cbUserType.getSelectedItem().toString(), cbCountry.getSelectedItem().toString());
             if (cbUserType.getSelectedItem().equals("Consumer")) {
                 user.createBuyerPerson(dataAccess, id, tfName.getText(), tfId.getText(), Integer.parseInt(tfAge.getText()));
             } else if (cbUserType.getSelectedItem().equals("Seller") && cbSellerType.getSelectedItem().equals("Person")) {

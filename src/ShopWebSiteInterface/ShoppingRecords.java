@@ -48,6 +48,7 @@ public class ShoppingRecords extends javax.swing.JFrame {
         Profile pf = new Profile(dataAccess);
         pf.setVisible(true);
     }
+    // method to load label witn total in shops
     public void loadLbl(){
         ResultSetCustomized rsc = product.getTotal(dataAccess, idUser);
         int res = 0;
@@ -60,6 +61,7 @@ public class ShoppingRecords extends javax.swing.JFrame {
         lbTotal.setText("Total in shops: $" +Integer.toString(res));
         
     }
+    // method to load data in table records
     public void loadData(){
         ResultSetCustomized rs;
         rs = user.currentUser(dataAccess);;

@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
  ** @author Ana Elena Ulate Salas
  **/
 public class Profile extends javax.swing.JFrame {
+    // variables
     private DataAccess dataAccess;
     private int id;
     private int idUser;
@@ -48,6 +49,7 @@ public class Profile extends javax.swing.JFrame {
         MainMenu mm = new MainMenu(dataAccess);
         mm.setVisible(true);
     }
+    //method to load label with the username
     public void loadLbl(){
         ResultSetCustomized rsc;
         rsc= user.getName(dataAccess);
@@ -62,7 +64,7 @@ public class Profile extends javax.swing.JFrame {
         lblNameProfile.setHorizontalAlignment(lblNameProfile.CENTER);
         lblNameProfile.setVerticalAlignment(lblNameProfile.CENTER);
     }
-    
+    // method to load comments
     public void loadData(){
         ResultSetCustomized rs;
         rs = user.currentUser(dataAccess);
@@ -79,7 +81,6 @@ public class Profile extends javax.swing.JFrame {
         }else{
             rs = cmm.getBuyerComments(dataAccess);
         }
-        
         if(rs.isError()){
             JOptionPane.showMessageDialog(this, rs.getErrorDescription(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -114,7 +115,7 @@ public class Profile extends javax.swing.JFrame {
             id = 0;
         }
     }
-    
+    // method to check the user type
     public void checkUserType(){
         ResultSetCustomized result; 
         result = user.currentUser(dataAccess);
@@ -142,6 +143,7 @@ public class Profile extends javax.swing.JFrame {
     public void stars(){
         
     }
+    // Method to view shopping records
     public void shoppingRecords(){
         ShoppingRecords sr = new ShoppingRecords(dataAccess);
         setVisible(false);
