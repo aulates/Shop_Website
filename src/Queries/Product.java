@@ -306,4 +306,53 @@ public class Product {
         }
         return result;
     }
+
+    public ResultSetCustomized getTotalSold(DataAccess da, int idUser) {
+            ResultSetCustomized result;
+        PreparedStatement stmt;
+        String sql = "SELECT SUM(ts.amount*p.price) "
+            + "FROM TotalSold ts JOIN Products p ON ts.id_Product = p.id Where p.id_Seller = " + idUser +";"; 
+        try {
+            stmt = da.getConnection().prepareStatement(sql);
+            result = da.executeSqlQuery(stmt);
+            
+        } catch (SQLException ex) {
+            result = new ResultSetCustomized();
+            result.setError(ex.getLocalizedMessage());
+        }
+        return result;
+    }
+    public ResultSetCustomized SelectTotalSold(DataAccess da, int idUser) {
+            ResultSetCustomized result;
+        PreparedStatement stmt;
+        String sql = "SELECT ts.id, p.productName, SUM(p.price*ts.amount) "
+            + "FROM TotalSold ts JOIN Products p ON ts.id_Product = p.id Where p.id_Seller = " + idUser +" GROUP BY ts.id, p.productName;"; 
+        try {
+            stmt = da.getConnection().prepareStatement(sql);
+            result = da.executeSqlQuery(stmt);
+            
+        } catch (SQLException ex) {
+            result = new ResultSetCustomized();
+            result.setError(ex.getLocalizedMessage());
+        }
+        return result;
+    }
+    public String[] getIdentifiersTotalSold(){
+        String[] identifiers = {"Sale","Product","Sold"};
+        return identifiers;
+    }
+    public Result createTotalSold(DataAccess da, int idProduct, int amount) {
+        Result result;
+        String sql = "INSERT INTO " + da.getSchema() + "TotalSold(id_Product, amount) VALUES (?, ?);";
+        try {
+            PreparedStatement stmt = da.getConnection().prepareStatement(sql);
+            stmt.setInt(1, idProduct);
+            stmt.setInt(2, amount);
+            result = da.executeSQL(stmt);
+        } catch (SQLException e) {
+            result = new Result();
+            result.setError(e.getLocalizedMessage());
+        }
+        return result;
+    }
 }

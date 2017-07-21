@@ -58,8 +58,8 @@ public class LogIn extends javax.swing.JFrame {
         Result =  users.LogIn(dataAccess, tfUsername.getText(), passwordText);
          try {
              if (Result.getResultSet().next()){
-                 email = Result.getResultSet().getString("email").trim();
-                 password = Result.getResultSet().getString("userPassword").trim();
+                 email = Result.getResultSet().getString("email");
+                 password = Result.getResultSet().getString("userPassword");
              }  // Validation of the email(username) and password exist in Data Base
                  if (email.equals(tfUsername.getText()) && password.equals(passwordText)){
                      users.updateUserState(dataAccess, true, email);

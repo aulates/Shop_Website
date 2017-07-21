@@ -82,14 +82,13 @@ public class SignUp extends javax.swing.JFrame {
             }
             int id = user.createUser(dataAccess, tfEmail.getText().trim(), password , cbUserType.getSelectedItem().toString(), cbCountry.getSelectedItem().toString());
             if (cbUserType.getSelectedItem().equals("Consumer")) {
-                user.createBuyerPerson(dataAccess, id, tfName.getText(), tfId.getText(), Integer.parseInt(tfAge.getText()));
+                user.createBuyerPerson(dataAccess, id, tfName.getText().trim(), tfId.getText(), Integer.parseInt(tfAge.getText()));
             } else if (cbUserType.getSelectedItem().equals("Seller") && cbSellerType.getSelectedItem().equals("Person")) {
-                user.createSellerPerson(dataAccess, id, tfName.getText(), tfId.getText(), Integer.parseInt(tfAge.getText()));
+                user.createSellerPerson(dataAccess, id, tfName.getText().trim(), tfId.getText().trim(), Integer.parseInt(tfAge.getText().trim()));
             } else if (cbSellerType.getSelectedItem().equals("Company")) {
-                user.createSellerCompany(dataAccess, id, tfId.getText(), tfSocialReasons.getText(), tfCommercialReason.getText());
+                user.createSellerCompany(dataAccess, id, tfId.getText().trim(), tfSocialReasons.getText().trim(), tfCommercialReason.getText().trim());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
     //Registrate tha user, show message and back to the main frame

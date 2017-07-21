@@ -26,6 +26,7 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     private int id;
     private int idUserProducts;
     private int amountProduct;
+    private int amountProductTable;
     private int idSeller;
     Product product = new Product();
     User user = new User();
@@ -92,7 +93,7 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
             this.idUserProducts = (Integer)tProducts.getModel().getValueAt(index, 0);
             this.id = (Integer) tProducts.getModel().getValueAt(index, 1);
             this.idSeller = (Integer) tProducts.getModel().getValueAt(index, 2);
-            this.amountProduct = (Integer) tProducts.getModel().getValueAt(index, 7);
+            this.amountProductTable = (Integer) tProducts.getModel().getValueAt(index, 7);
         } catch (Exception e) {
             id = 0;
         }
@@ -255,8 +256,13 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
     }//GEN-LAST:event_miBackActionPerformed
 
     private void btBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuyActionPerformed
-        comment();
-        addBuy();
+        if (idUserProducts <= 0) {
+            addBuy();
+        }
+        else{
+            addBuy();
+            comment();
+        }
     }//GEN-LAST:event_btBuyActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
@@ -330,7 +336,7 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
         result = user.currentUser(dataAccess);
         int idUser = 0;
         int amount = Integer.parseInt(cbAmount.getSelectedItem().toString());
-        int choosed = this.amountProduct - amount;
+        int choosed = 0;
         try {
             if (result.getResultSet().next()) {
             idUser = result.getResultSet().getInt("id");
@@ -344,19 +350,25 @@ public class ShoppingCart extends javax.swing.JFrame implements ToolBarMethod{
             }         
         } catch (Exception e) {
         }
-        int remaning = this.amountProduct - amount;
-        System.out.println(remaning);
-        if(remaning < 0){
+        if (amountProductTable != amount) {
+            if (JOptionPane.showConfirmDialog(this , "Do you wish to change the amount to: " + amount + " ?", "Warning", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                choosed = amount;
+            }
+            else{
+                choosed = amountProductTable;
+            }
+        }
+        int remaning = this.amountProduct - choosed;
+        if(remaning <= 0){
             JOptionPane.showMessageDialog(this, "Not enough amount of this product.", "Information!", JOptionPane.INFORMATION_MESSAGE);
         }
         else{
             
             product.boughtProduct(dataAccess, true, idUserProducts);
-            product.updateUserProductAmountByIdSeller(dataAccess, remaning, id);
+            product.updateUserProductAmountByIdSeller(dataAccess, choosed, idSeller);
+            product.updateUserProductAmountByUserProductId(dataAccess, remaning, id);
+            product.createTotalSold(dataAccess, id, choosed);
             JOptionPane.showMessageDialog(this, "Your shopping is finished, it will reach your home in a maximmum time of a month", "Information", JOptionPane.INFORMATION_MESSAGE);
-        }
-        if (remaning == 0) {
-            //product.deleteUserProduct(dataAccess,idUserProducts);
         }
         loadData();
     }

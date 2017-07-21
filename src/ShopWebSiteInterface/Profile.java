@@ -11,6 +11,7 @@ import Queries.User;
 import databaseConnection.DataAccess;
 import databaseConnection.DatabaseUtils;
 import databaseConnection.ResultSetCustomized;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -42,6 +43,9 @@ public class Profile extends javax.swing.JFrame {
         enableRowSelectionListener();
         loadLbl();
         checkUserType();
+        if (tComments.getRowCount() > 0){
+            setStarsImage();
+        }
     }
     //method to go back to the principal menu
     public void menuBack(){
@@ -119,7 +123,7 @@ public class Profile extends javax.swing.JFrame {
     public void checkUserType(){
         ResultSetCustomized result; 
         result = user.currentUser(dataAccess);
-        String userType = "";
+        //String userType = "";
                 try {
                     if (result.getResultSet().next()) {
                     userType = result.getResultSet().getString("user_type");
@@ -128,21 +132,110 @@ public class Profile extends javax.swing.JFrame {
         } catch (Exception e) {
         }
         if(userType.equals("Consumer")){
-            taComments.setEnabled(false);
             btAnswerComment.setEnabled(false);
 
         }
-    } 
+    }
+    public int rating(){
+        int rows = tComments.getRowCount();
+        int sellerStars=0;
+        int consumerStars=0;
+        for (int i = 0; i < tComments.getRowCount(); i++){
+            if ((Integer)tComments.getModel().getValueAt(i, 2) != null) {
+                sellerStars += (Integer)tComments.getModel().getValueAt(i, 2);// 3rd column . row column indexes are 0 based
+                System.out.println(sellerStars);
+            }  
+        }
+        for (int i = 0; i < tComments.getRowCount(); i++){
+            if ((Integer)tComments.getModel().getValueAt(i, 2) != null) {
+                consumerStars += (Integer)tComments.getModel().getValueAt(i, 4);// 3rd column . row column indexes are 0 based
+            System.out.println(consumerStars);
+            } 
+        }
+        if(userType.equals("Consumer")){
+            return  consumerStars/rows;
+        }
+        else{
+            return sellerStars/rows;
+        }
+    }
     //methos to go to aswer comment 
     public void aswerComment(){
         setVisible(false);
         AswerComment ac = new AswerComment(dataAccess,idUserProducts );
         ac.setVisible(true);   
     }
-    //method to the stars
-    public void stars(){
-        
+    //method to get stars
+    public int stars(){
+        ResultSetCustomized rsc = null;
+        int starAmount = 0;
+        if (userType.equals("Seller")) {
+            rsc = product.getTotalSold(dataAccess, idUser);
+            int res = 0;
+            try {
+                if (rsc.getResultSet().next()) {
+                    res = rsc.getResultSet().getInt("sum");
+                }
+            } catch (Exception e) {
+            };
+            int rating = rating();
+            if (res > 0 && res <= 1000) {
+                starAmount += 1;
+            }
+            if (res > 1000 && res <= 2000) {
+                starAmount += 2;
+            }
+            if (res > 2000 && res <= 3000) {
+                starAmount += 3;
+            }
+            if (res > 3000 && res <= 4000) {
+                starAmount += 4;
+            }
+            if (res > 4000) {
+                starAmount += 5;
+            }
+            return  rating + starAmount;
+        }
+        else{
+            return rating();
+        }
     }
+    
+    public void setStarsImage(){
+        int stars = stars();
+        if (stars == 1) {
+              lbStars1.setVisible(false);
+              lbStars2.setVisible(false);
+              lbStars3.setVisible(false);
+              lbStars4.setVisible(false);
+//            ImageIcon iconLogo = new ImageIcon("one-Star.png");
+//            lbStars.setIcon(iconLogo);
+        }
+        if (stars == 2) {
+             lbStars1.setVisible(false);
+             lbStars2.setVisible(false);
+             lbStars3.setVisible(false);
+//            ImageIcon iconLogo = new ImageIcon("two-Stars.png");
+//            lbStars.setIcon(iconLogo);
+        }
+        if (stars == 3) {
+             lbStars1.setVisible(false);
+             lbStars2.setVisible(false);
+//            ImageIcon iconLogo = new ImageIcon("three-Stars.png");
+//            lbStars.setIcon(iconLogo);
+        }
+        if (stars == 4 ) {
+              lbStars1.setVisible(false);
+//            ImageIcon iconLogo = new ImageIcon("four-Stars.png");
+//            lbStars.setIcon(iconLogo);
+        }
+        else{
+             
+//            ImageIcon iconLogo = new ImageIcon("five-Stars.png");
+//            lbStars.setIcon(iconLogo);
+        }
+    }
+    
     // Method to view shopping records
     public void shoppingRecords(){
         ShoppingRecords sr = new ShoppingRecords(dataAccess);
@@ -165,11 +258,13 @@ public class Profile extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tComments = new javax.swing.JTable();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        taComments = new javax.swing.JTextArea();
         btAnswerComment = new javax.swing.JButton();
-        lbStars = new javax.swing.JLabel();
         bShoppingRecords = new javax.swing.JButton();
+        lbStars1 = new javax.swing.JLabel();
+        lbStars2 = new javax.swing.JLabel();
+        lbStars3 = new javax.swing.JLabel();
+        lbStars4 = new javax.swing.JLabel();
+        lbStars5 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -210,10 +305,6 @@ public class Profile extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tComments);
 
-        taComments.setColumns(20);
-        taComments.setRows(5);
-        jScrollPane3.setViewportView(taComments);
-
         btAnswerComment.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Comment-add-icon.png"))); // NOI18N
         btAnswerComment.setText("  Aswer Comment");
         btAnswerComment.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -223,9 +314,6 @@ public class Profile extends javax.swing.JFrame {
                 btAnswerCommentActionPerformed(evt);
             }
         });
-
-        lbStars.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbStars.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/five-Stars.png"))); // NOI18N
 
         bShoppingRecords.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/product-icon.png"))); // NOI18N
         bShoppingRecords.setText("Shopping Records");
@@ -237,52 +325,75 @@ public class Profile extends javax.swing.JFrame {
             }
         });
 
+        lbStars1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/one-Star.png"))); // NOI18N
+
+        lbStars2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/one-Star.png"))); // NOI18N
+
+        lbStars3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/one-Star.png"))); // NOI18N
+
+        lbStars4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/one-Star.png"))); // NOI18N
+
+        lbStars5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/one-Star.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                        .addGap(148, 148, 148)
+                        .addComponent(btAnswerComment))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(bShoppingRecords, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbStars)
-                                .addGap(21, 21, 21))
-                            .addComponent(lblNameProfile, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(lbStars1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lbStars2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lbStars3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lbStars4)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lbStars5))
+                                .addComponent(lblNameProfile)))
                         .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btAnswerComment)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addGap(35, 35, 35))))
+                        .addGap(30, 30, 30))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addGap(12, 12, 12)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblNameProfile)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lbStars, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(bShoppingRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lbStars1)
+                                .addComponent(lbStars2)
+                                .addComponent(lbStars3))
+                            .addComponent(lbStars4)
+                            .addComponent(lbStars5)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btAnswerComment)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(92, 92, 92)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(bShoppingRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btAnswerComment))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Option");
@@ -304,9 +415,7 @@ public class Profile extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,11 +455,13 @@ public class Profile extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JLabel lbStars;
+    private javax.swing.JLabel lbStars1;
+    private javax.swing.JLabel lbStars2;
+    private javax.swing.JLabel lbStars3;
+    private javax.swing.JLabel lbStars4;
+    private javax.swing.JLabel lbStars5;
     private javax.swing.JLabel lblNameProfile;
     private javax.swing.JTable tComments;
-    private javax.swing.JTextArea taComments;
     // End of variables declaration//GEN-END:variables
 }

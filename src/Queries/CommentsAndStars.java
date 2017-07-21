@@ -18,14 +18,15 @@ import java.sql.SQLException;
 public class CommentsAndStars {
         private DataAccess dataAccess;
     //method to create comments and stars
-    public Result createCommentsAndStars(DataAccess da, String commentary, int starsSeller, int id_UserProducts) {
+    public Result createCommentsAndStars(DataAccess da, String commentary, int starsSeller ,int id_UserProducts) {
         Result result;
-        String sql = "INSERT INTO " + da.getSchema() + "CommentsAndStars(commentary, starsSeller, id_UserProducts) VALUES (?, ?, ?);";
+        String sql = "INSERT INTO " + da.getSchema() + "CommentsAndStars(commentary, starsSeller, starsConsumer ,id_UserProducts) VALUES (?, ?, ? ,?);";
         try {
             PreparedStatement stmt = da.getConnection().prepareStatement(sql);
             stmt.setString(1, commentary);
             stmt.setInt(2, starsSeller);
-            stmt.setInt(3, id_UserProducts);
+            stmt.setInt(3, 0);
+            stmt.setInt(4, id_UserProducts);
             result = da.executeSQL(stmt);
         } catch (SQLException e) {
             result = new Result();

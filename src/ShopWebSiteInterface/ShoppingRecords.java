@@ -28,6 +28,7 @@ public class ShoppingRecords extends javax.swing.JFrame {
     private String productName;
     private int price;
     private int total;
+    private String userType;
     Product product = new Product();
     User user = new User();
     /**
@@ -50,7 +51,13 @@ public class ShoppingRecords extends javax.swing.JFrame {
     }
     // method to load label witn total in shops
     public void loadLbl(){
-        ResultSetCustomized rsc = product.getTotal(dataAccess, idUser);
+        ResultSetCustomized rsc = null;
+        if (userType.equals("Consumer")) {
+            rsc = product.getTotal(dataAccess, idUser);
+        }
+        else{
+            rsc = product.getTotalSold(dataAccess, idUser);
+        }
         int res = 0;
         try {
             if (rsc.getResultSet().next()) {
@@ -68,25 +75,41 @@ public class ShoppingRecords extends javax.swing.JFrame {
                 try {
                     if (rs.getResultSet().next()) {
                     idUser = rs.getResultSet().getInt("id");
-                    
+                    userType = rs.getResultSet().getString("user_type");
                      }
         } catch (Exception e) {
         }
-        rs = product.getBoughtProducts(dataAccess, idUser );
+        if (userType.equals("Consumer")) {
+            rs = product.getBoughtProducts(dataAccess, idUser );
+        }
+        else{
+            rs = product.SelectTotalSold(dataAccess, idUser);
+            taShoppings.setVisible(false);
+        }
+        
         if(rs.isError()){
             JOptionPane.showMessageDialog(this, rs.getErrorDescription(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         else{
-            DefaultTableModel model = DatabaseUtils.getDefaultTableModel(rs.getResultSet(), product.getIdentifiers());
-            tRecords.setModel(model);
-            model.fireTableDataChanged();
-            tRecords.removeColumn(tRecords.getColumnModel().getColumn(7));
-            tRecords.removeColumn(tRecords.getColumnModel().getColumn(6));
-            tRecords.removeColumn(tRecords.getColumnModel().getColumn(5));
-            tRecords.removeColumn(tRecords.getColumnModel().getColumn(4));
-            tRecords.removeColumn(tRecords.getColumnModel().getColumn(3));
-            tRecords.removeColumn(tRecords.getColumnModel().getColumn(2));
-            tRecords.removeColumn(tRecords.getColumnModel().getColumn(1));
+            DefaultTableModel model = null;
+            if (userType.equals("Consumer")) {
+                model = DatabaseUtils.getDefaultTableModel(rs.getResultSet(), product.getIdentifiers());
+                tRecords.setModel(model);
+                model.fireTableDataChanged();
+                tRecords.removeColumn(tRecords.getColumnModel().getColumn(7));
+                tRecords.removeColumn(tRecords.getColumnModel().getColumn(6));
+                tRecords.removeColumn(tRecords.getColumnModel().getColumn(5));
+                tRecords.removeColumn(tRecords.getColumnModel().getColumn(4));
+                tRecords.removeColumn(tRecords.getColumnModel().getColumn(3));
+                tRecords.removeColumn(tRecords.getColumnModel().getColumn(2));
+                tRecords.removeColumn(tRecords.getColumnModel().getColumn(1));
+            }
+            else{
+                model = DatabaseUtils.getDefaultTableModel(rs.getResultSet(), product.getIdentifiersTotalSold());
+                tRecords.setModel(model);
+                model.fireTableDataChanged();
+            }
+            
         }
     }
     // Method to allow selection of a row
@@ -166,24 +189,27 @@ public class ShoppingRecords extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbTotal)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addContainerGap(56, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(lbTotal)
+                            .addContainerGap())
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(54, 54, 54)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(30, Short.MAX_VALUE)
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(23, 23, 23)
                 .addComponent(lbTotal)
                 .addContainerGap())
         );
@@ -207,7 +233,9 @@ public class ShoppingRecords extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
