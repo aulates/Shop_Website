@@ -46,6 +46,13 @@ public class Profile extends javax.swing.JFrame {
         if (tComments.getRowCount() > 0){
             setStarsImage();
         }
+        else{
+         lbStars1.setVisible(false);
+         lbStars2.setVisible(false);
+         lbStars3.setVisible(false);
+         lbStars4.setVisible(false);
+
+        }
     }
     //method to go back to the principal menu
     public void menuBack(){
@@ -203,29 +210,29 @@ public class Profile extends javax.swing.JFrame {
     
     public void setStarsImage(){
         int stars = stars();
-        if (stars == 1) {
-              lbStars1.setVisible(false);
-              lbStars2.setVisible(false);
-              lbStars3.setVisible(false);
-              lbStars4.setVisible(false);
+        if (stars <= 1) {
+              pProfile.remove(lbStars1);
+              pProfile.remove(lbStars2);
+              pProfile.remove(lbStars3);
+              pProfile.remove(lbStars4);
 //            ImageIcon iconLogo = new ImageIcon("one-Star.png");
 //            lbStars.setIcon(iconLogo);
         }
         if (stars == 2) {
-             lbStars1.setVisible(false);
-             lbStars2.setVisible(false);
-             lbStars3.setVisible(false);
+             pProfile.remove(lbStars1);
+             pProfile.remove(lbStars2);
+             pProfile.remove(lbStars3);
 //            ImageIcon iconLogo = new ImageIcon("two-Stars.png");
 //            lbStars.setIcon(iconLogo);
         }
         if (stars == 3) {
-             lbStars1.setVisible(false);
-             lbStars2.setVisible(false);
+             pProfile.remove(lbStars1);
+             pProfile.remove(lbStars2);
 //            ImageIcon iconLogo = new ImageIcon("three-Stars.png");
 //            lbStars.setIcon(iconLogo);
         }
         if (stars == 4 ) {
-              lbStars1.setVisible(false);
+              pProfile.remove(lbStars1);
 //            ImageIcon iconLogo = new ImageIcon("four-Stars.png");
 //            lbStars.setIcon(iconLogo);
         }
@@ -253,9 +260,9 @@ public class Profile extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
+        pProfile = new javax.swing.JPanel();
         lblNameProfile = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lbPicture = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tComments = new javax.swing.JTable();
         btAnswerComment = new javax.swing.JButton();
@@ -290,7 +297,7 @@ public class Profile extends javax.swing.JFrame {
         lblNameProfile.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         lblNameProfile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/profile-icon (1).png"))); // NOI18N
+        lbPicture.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/profile-icon (1).png"))); // NOI18N
 
         tComments.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -335,25 +342,25 @@ public class Profile extends javax.swing.JFrame {
 
         lbStars5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/one-Star.png"))); // NOI18N
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout pProfileLayout = new javax.swing.GroupLayout(pProfile);
+        pProfile.setLayout(pProfileLayout);
+        pProfileLayout.setHorizontalGroup(
+            pProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pProfileLayout.createSequentialGroup()
+                .addGroup(pProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pProfileLayout.createSequentialGroup()
                         .addGap(148, 148, 148)
                         .addComponent(btAnswerComment))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(pProfileLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pProfileLayout.createSequentialGroup()
+                        .addGroup(pProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(bShoppingRecords, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(pProfileLayout.createSequentialGroup()
                                     .addComponent(lbStars1)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(lbStars2)
@@ -365,32 +372,32 @@ public class Profile extends javax.swing.JFrame {
                                     .addComponent(lbStars5))
                                 .addComponent(lblNameProfile)))
                         .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pProfileLayout.createSequentialGroup()
+                        .addComponent(lbPicture)
                         .addGap(30, 30, 30))))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+        pProfileLayout.setVerticalGroup(
+            pProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pProfileLayout.createSequentialGroup()
+                .addGroup(pProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pProfileLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblNameProfile)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(pProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(lbStars1)
                                 .addComponent(lbStars2)
                                 .addComponent(lbStars3))
                             .addComponent(lbStars4)
                             .addComponent(lbStars5)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(pProfileLayout.createSequentialGroup()
                         .addGap(92, 92, 92)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(pProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(bShoppingRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btAnswerComment))
                 .addContainerGap(20, Short.MAX_VALUE))
@@ -415,11 +422,11 @@ public class Profile extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(pProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -448,20 +455,20 @@ public class Profile extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bShoppingRecords;
     private javax.swing.JButton btAnswerComment;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbPicture;
     private javax.swing.JLabel lbStars1;
     private javax.swing.JLabel lbStars2;
     private javax.swing.JLabel lbStars3;
     private javax.swing.JLabel lbStars4;
     private javax.swing.JLabel lbStars5;
     private javax.swing.JLabel lblNameProfile;
+    private javax.swing.JPanel pProfile;
     private javax.swing.JTable tComments;
     // End of variables declaration//GEN-END:variables
 }

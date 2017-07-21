@@ -59,7 +59,7 @@ public class Product {
     // method update product amount in consumer 
     public Result updateUserProductAmount(DataAccess da, int amount, int id){
         Result result;
-        String sql = "UPDATE " + da.getSchema() + "UserProducts SET amount = ? WHERE id_User = ?";
+        String sql = "UPDATE " + da.getSchema() + "UserProducts SET amount = ? WHERE id_Product= ?";
         try {
             PreparedStatement stmt = da.getConnection().prepareStatement(sql);
             stmt.setInt(1, amount);

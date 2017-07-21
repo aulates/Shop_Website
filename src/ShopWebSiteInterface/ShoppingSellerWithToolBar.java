@@ -29,6 +29,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     private Integer id = null;
     private String productNameFilter;
     private String productCodeFilter;
+    private int idProduct;
     Product product = new Product();
     User user = new User();
     /**
@@ -64,12 +65,13 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
     private void updateWithSelectedRow(int index){
         try {
             this.id = (Integer) tAddProducts.getModel().getValueAt(index, 0);
-            cbCode.setSelectedItem(tAddProducts.getModel().getValueAt(index, 1).toString());
-            tfProductName.setText(tAddProducts.getModel().getValueAt(index, 2).toString());
-            tfPrice.setText(tAddProducts.getModel().getValueAt(index, 3).toString());
-            cbState.setSelectedItem(tAddProducts.getModel().getValueAt(index, 4).toString());
-            cbAmount.setSelectedItem(tAddProducts.getModel().getValueAt(index, 5).toString());
-            cbCountry.setSelectedItem(tAddProducts.getModel().getValueAt(index, 6).toString());
+            this.idProduct = (Integer)tAddProducts.getModel().getValueAt(index, 1);
+            cbCode.setSelectedItem(tAddProducts.getModel().getValueAt(index, 2).toString());
+            tfProductName.setText(tAddProducts.getModel().getValueAt(index, 3).toString());
+            tfPrice.setText(tAddProducts.getModel().getValueAt(index, 4).toString());
+            cbState.setSelectedItem(tAddProducts.getModel().getValueAt(index, 5).toString());
+            cbAmount.setSelectedItem(tAddProducts.getModel().getValueAt(index, 6).toString());
+            cbCountry.setSelectedItem(tAddProducts.getModel().getValueAt(index, 7).toString());
         } catch (Exception e) {
             id = null;
             clearTextField();
@@ -378,7 +380,7 @@ public class ShoppingSellerWithToolBar extends ToolBarInterface{
             else{
                 product.updateProductPrice(dataAccess, Integer.parseInt(tfPrice.getText().toString()), tfProductName.getText());
                 product.updateUserProductAmount(dataAccess, Integer.parseInt(cbAmount.getSelectedItem().toString())
-                        , idUser);
+                        , idProduct);
             }
         }
         this.clearTextField();
